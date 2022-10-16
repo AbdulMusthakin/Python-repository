@@ -10,8 +10,9 @@ guess = 0
 intro()
 
 x = 0
-y = input(f"Choose a difficulty(Easy, Medium, Hard, Impossible):") # To Be Finished
-while y.lower in difficultylist:
+y = "None"
+while y.lower() not in difficultylist:
+    y = input(f"Choose a difficulty(Easy, Medium, Hard, Impossible):")
     if y.lower() == "easy":
         x = random.randint(1, 10)
     elif y.lower() == "medium":
@@ -30,18 +31,18 @@ if guess > x:
 elif guess < x:
     print(f"Your guess was too low")
 else: pass
-print (f"You have {lives} lives left.") if guess != x else x
+print (f"You have {lives} lives left.") if guess != x else 0
 while guess != x and lives > 0:
     guess = int(input(f"Try again:"))
-    lives -= 1 if guess != x else x
+    lives -= 1 if guess != x else 0
     if guess > x:
         print(f"Your guess was too high")
     elif guess < x:
         print(f"Your guess was too low")
     else: pass
-    print(f"You have {lives} lives left.") if lives > 0 and guess != x else x
+    print(f"You have {lives} lives left.") if lives > 0 and guess != x else 0
 
 
 if lives > 0:
-    print(f"You guessed the right number!")
+    print(f"You guessed the right number! And you only needed {5 - lives} tries")
 else: print(f"You ran out of tries. The answer was {x}")
