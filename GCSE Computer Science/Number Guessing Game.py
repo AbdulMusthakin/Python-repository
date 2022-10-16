@@ -1,6 +1,6 @@
 import random
 
-difflist = ["easy","medium","hard","impossible"]
+difficultylist = ["easy","medium","hard","impossible"]
 def intro():
     print(f"Hello, welcome to my number guessing game.\nYou will guess a number and be told if it's the correct one.\nThis is a very skill-reliant game so try your best and have fun!")
 
@@ -11,14 +11,15 @@ intro()
 
 x = 0
 y = input(f"Choose a difficulty(Easy, Medium, Hard, Impossible):") # To Be Finished
-if y.lower() == "easy":
-    x = random.randint(1, 10)
-elif y.lower() == "medium":
-    x = random.randint(1, 20)
-elif y.lower() == "hard":
-    x = random.randint(1, 50)
-elif y.lower() == "impossible":
-    x = random.randint(1, 1000)
+while y.lower in difficultylist:
+    if y.lower() == "easy":
+        x = random.randint(1, 10)
+    elif y.lower() == "medium":
+        x = random.randint(1, 20)
+    elif y.lower() == "hard":
+        x = random.randint(1, 50)
+    elif y.lower() == "impossible":
+        x = random.randint(1, 1000)
 
 
 guess = int(input(f"Guess the Number:"))
