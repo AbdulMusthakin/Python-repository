@@ -1,9 +1,14 @@
 import random
+from time import sleep
 
 difficultylist = ["easy","medium","hard","impossible"]
 def intro():
     print(f"Hello, welcome to my number guessing game.\nYou will guess a number and be told if it's the correct one.\nThis is a very skill-reliant game so try your best and have fun!")
-
+leaderboard = { # To be Finished
+"Bert" : 2,
+"Tim" : 4,
+"Bartholamew" : 5,
+} 
 
 lives = 5
 guess = 0
