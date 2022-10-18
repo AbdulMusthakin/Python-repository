@@ -4,10 +4,11 @@ from time import sleep
 difficultylist = ["easy","medium","hard","impossible"]
 def intro():
     print(f"Hello, welcome to my number guessing game.\nYou will guess a number and be told if it's the correct one.\nThis is a very skill-reliant game so try your best and have fun!")
-leaderboard = { # To be Finished
+leaderboard = {
 "Bert" : 2,
 "Tim" : 4,
 "Bartholamew" : 5,
+"Bob" : 99,
 } 
 
 lives = 5
@@ -48,8 +49,23 @@ while guess != x and lives > 0:
         print(f"Your guess was too low")
     else: pass
     print(f"You have {lives} lives left.") if lives > 0 and guess != x else 0
-
+sleep(1)
 
 if lives > 0:
     print(f"You guessed the right number! And you only needed {5 - lives} tries")
 else: print(f"You ran out of tries. The answer was {x}")
+sleep(1)
+print("This game has been completed by other people as well,\nYou will be showed the leaderboard with your score added in a second")
+sleep(1)
+name = input("Please enter your name:")
+leaderboard[f"{name}"] = lives
+
+sortedleaderboard = dict(sorted(leaderboard.items(), key = lambda x:x[1])) 
+"""
+The above variable is a dictionary (It's been set as that wiht the dict() method).
+Its been sorted with sorted() function.
+the items() method is used to extract the items from the dictionary.
+The lambda function has x[1] because that it is the index of the value part of the items.
+"""
+sleep(2)
+print(sortedleaderboard)
