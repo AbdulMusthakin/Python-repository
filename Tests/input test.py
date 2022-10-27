@@ -1,14 +1,10 @@
-print("True or False - You like Turtles")
-x = input().lower()
-if x == "true":
-    x = True
-else:
-    x = False
-print("It is", str(x).lower(), "that you like Turtles")
-
-dict = {
-"Bob": 5,
-"Jim" : 3,
-"Tim": 8
-}
-print(sorted(dict.items(), key = lambda x:x[1]))
+print(20 <= 6)
+print("How much pizza slices do you want?")
+while True:
+    try:
+        pizza_slices = int(input())
+        if not 0 < pizza_slices <= 20 or not float(pizza_slices).is_integer():
+            raise ValueError
+        break
+    except ValueError:
+        print("Enter in a realistic number")

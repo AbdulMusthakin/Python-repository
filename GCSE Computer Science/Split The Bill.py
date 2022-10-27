@@ -11,7 +11,7 @@ print("How many people are sharing?")
 while True:
     try:
         people = int(input())
-        if not float(people).is_integer():
+        if not float(people).is_integer() or people <= 0:
             raise ValueError
         break
     except ValueError:
