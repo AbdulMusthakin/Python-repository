@@ -1,4 +1,6 @@
 import math
+from numbers import Integral
+import numpy
 
 def f(z):
         return math.factorial(z) 
