@@ -53,7 +53,7 @@ while True:
             if check: #If it returns True
                 score += 1
                 break #Automatically breaks the loop if the answer is correct
-        attempts -= 1
+            attempts -= 1
     break
     
 print("\n")
