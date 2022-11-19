@@ -1,6 +1,6 @@
-import numpy
-import sympy
+import sympy as sym
 
-
-p = [1, 0, 1]
-print(numpy.roots(p))
+x = sym.symbols('x')
+p = (x**2 + 8*x + 16)
+q = sym.solve(p)
+print(q)
