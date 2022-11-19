@@ -31,7 +31,7 @@ print("How much does the Pizza cost?")
 while True:
     try:
         cost = float(input())
-        if cost <= 0:
+        if cost <= 0: 
             raise ValueError
         break
     except:
