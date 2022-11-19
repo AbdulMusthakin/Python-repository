@@ -18,7 +18,7 @@ while True:
         if people <= 0 or not float(people).is_integer():
             raise ValueError
         break
-    except:
+    except ValueError:
         print("Enter a whole number")
 
 slices_per_person = pizza_slices // people
@@ -31,10 +31,10 @@ print("How much does the Pizza cost?")
 while True:
     try:
         cost = float(input())
-        if cost <= 0: 
+        if cost <= 0:
             raise ValueError
         break
-    except:
+    except ValueError:
         print("Enter a number")
 
 cost_per_slice = round(cost / pizza_slices, 2)

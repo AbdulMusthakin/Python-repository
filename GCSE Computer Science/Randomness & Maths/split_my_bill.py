@@ -1,7 +1,7 @@
-print("---Welcome to Split My Bill---")
+print("Welcome to Split My Bill")
 print("What is the total bill?")
 while True:
-    try: 
+    try:
         bill_total = float(input())
         break
     except ValueError:
@@ -11,7 +11,7 @@ print("How many people are sharing?")
 while True:
     try:
         people = int(input())
-        if not float(people).is_integer() or people <= 0:  
+        if not float(people).is_integer() or people <= 0:
             raise ValueError
         break
     except ValueError:
