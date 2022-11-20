@@ -22,8 +22,4 @@ def times_table_generator():
             is_valid = True
         except ValueError:
             print("You must enter a number above 1")
-    print("Here is the", times_table, "times table:")
-    for i in range(1, max_value):
-        answer = i * times_table
-        print(i, "times", times_table, "is", answer)
-times_table_generator()
+    return max_value, times_table
