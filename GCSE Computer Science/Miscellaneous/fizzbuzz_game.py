@@ -21,6 +21,16 @@ leaderboard = {
 
 
 def game(max_range):
+    """This is my main game function and is where the sequence of numbers is run with all its rules.
+    The player of the game is given the chance to enter in the right word in a given time limit.
+
+    Args:
+        max_range (int): This is the maximum number the game goes upto, if the player gets
+        everything before correct.
+
+    Returns:
+        int: The highest number that the player has gotten upto, will be transferred to their score.
+    """
     function_score = 0
     for i in range(1, max_range + 1):
         num = ""
@@ -49,6 +59,9 @@ def game(max_range):
 
 
 def intro():
+    """This is the main 'screen' of the game, where the player can view the rules or leaderboard,
+    or start the actual game. Afterwards, they will always be returned back here unless they quit.
+    """
     while True:
         try:
             user_input = input("Welcome to the fizzbuzz game. \
