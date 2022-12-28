@@ -81,7 +81,7 @@ sleep(1)
 name = input("Please enter your name:")
 leaderboard[f"{name}"] = score
 
-sortedleaderboard = dict(sorted(leaderboard.items(), key = lambda x:x[1])) 
+sortedleaderboard = dict(sorted(leaderboard.items(), key = lambda x:x[1]))
 """
 The above variable is a dictionary (It's been set as that wiht the dict() method).
 Its been sorted with sorted() function.
