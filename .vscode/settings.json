@@ -12,5 +12,11 @@
     "python.testing.pytestArgs": [
         "Tests"
     ],
-    "python.linting.pylintArgs": ["--disable=C0114"],
+    "python.linting.pylintArgs": [
+        "--disable=C0114"
+    ],
+    "editor.tokenColorCustomizations": {
+        "comments": "",
+        "textMateRules": []
+    },
 }

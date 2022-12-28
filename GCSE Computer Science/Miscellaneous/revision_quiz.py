@@ -4,8 +4,10 @@ import random
 
 INTRO_HAS_RAN = False
 NAME_CHOSEN = False
+# These two variables above are to make it so the introduction and name selection only happen once.
 
 leaderboard = {
+    # A made-up leaderboard that the user can add their name to after completing a quiz
     "Bob": 1,
     "Tim": 4,
     "Jim": 0,
@@ -13,6 +15,8 @@ leaderboard = {
 }
 
 hardware_questions = {
+    # A nested dictionary. A dictionary that contains a dictionary.
+    # Here, it's an index of each question and a dictionary containing a question and answer.
     1: {
         "question": "What does the R in ROM stand for?",
         "answer": "Read"
@@ -99,6 +103,7 @@ network_questions = {
 }
 
 all_quizzes = {
+    # This is more efficient than having indivisual if statements, especially with more quizzes
     1: hardware_questions,
     2: network_questions,
 }
@@ -127,12 +132,13 @@ def quiz_selection(score):
     global NAME_CHOSEN
     while True:
         try:
-            if NAME_CHOSEN is False:
+            if NAME_CHOSEN is False:  # Only runs once.
                 name = input(
                     "Your score will be added to the leaderboard.\nEnter your name: ")
                 NAME_CHOSEN = True
                 intro()
             leaderboard.update({name.capitalize(): score})
+            # Updates the value of a key if it already exists or adds a new one if it doesn't.
             if name == "":
                 raise ValueError
             break
@@ -158,12 +164,15 @@ def check_answer(quiz_arg, question_arg, answer_arg, attempts_arg):
         bool: Boolean value depending on whether the user got the question right or wrong
     """
     if quiz_arg[question_arg]['answer'] == answer_arg.title():
+# The above line takes the dictionary associated with a key in the quiz (dict outside nested dict),
+        # and the value of 'answer' inside of that dictionary.
         print("Correct!")
         return True
     # Everything in this function below this will only run if the if statement above is false,
     # because otherwise the return statement runs and ends the function. So I dont need to use else.
     print(f"Incorrect! You have {attempts_arg - 1} attempts left.")
-    if attempts_arg == 1:
+    # Above uses - 1 because one attempt will be lost afterwards since user got question incorrect.
+    if attempts_arg == 1:  # not 0 because user would have lost an attempt.
         print("You ran out of tries")
         print(f"The answer was '{quiz_arg[question_arg]['answer']}'")
     return False
@@ -182,20 +191,32 @@ def quiz(questions_dict, score):
         int: The score of the user after finishing the quiz.
     """
     questions_dict_list = list(questions_dict.items())
+    # Could do this in two lines but less readble.
+    # First, we get a view object of the dictionary with .items() and create a list with it.
     random.shuffle(questions_dict_list)
+    # Then we shuffle that list with random.shuffle()
     questions_dict = dict(questions_dict_list)
+    # Lastly, we turn this list back into a dictionary and assign it to the original dictionary.
+    # Wouldn't it be neat if there was just a method that shuffled dictionaries for you?
     for key, questions in questions_dict.items():
+        # The key here numbers all the questions which is useful for the check_answer() function.
         if "True" in questions['question'] or "Yes" in questions['question']:
             attempts = 1
+        # This checks if the question is a True and False one,
+        # since you don't want to give multiple attempts for that.
         else:
             attempts = 3
         while attempts > 0:
             print(questions['question'])
+            # This is a part of the quiz that is different from my original quiz I did.
+            # Previously, I did quiz[question]['question'] and looped through the quiz normally.
+            # Now I have used .items() to loop through it and make the code cleaner.
             answer = input("Enter Answer: ")
             check = check_answer(questions_dict, key, answer, attempts)
             if check:
                 score += 1
                 break
+            # Since you don't need to go through the question again after getting it right.
             attempts -= 1
     return score
 
@@ -224,7 +245,7 @@ def main():
     global INTRO_HAS_RAN
     if INTRO_HAS_RAN is False:
         INTRO_HAS_RAN = True
-        intro()
+        intro()  # Only runs once
     try:
         user_input = input("Main Menu - Press 1 to see quiz selection. Press 2 to see leaderboard. \
 Press 3 to quit. \n")
@@ -239,11 +260,12 @@ Press 3 to quit. \n")
             print("Returning to Main Menu:")
             sleep(1)
             main()
-        elif user_input == "3":
+        elif user_input == "3": # If 3 is entered then no ValueError happens and the function ends.
             pass
         else:
             raise ValueError
     except ValueError:
         print("You have entered an invalid option. Try Again: \n")
         sleep(1)
-        main()
+        main()  # We don't have to make a while loop hear since the code would end now so we just
+        # call the main() function again which does the same thing as while loop but cleaner.
