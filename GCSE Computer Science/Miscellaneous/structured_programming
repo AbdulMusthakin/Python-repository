@@ -1,0 +1,37 @@
+def num_dogs():
+    while True:
+        try:
+            dogs = int(input("How many dogs were walked? In digits. "))
+            if dogs <= 3:
+                break
+            print("Maximum 3 dogs.")
+        except ValueError:
+            print("Invalid input.")
+    return dogs
+
+def num_days():
+    while True:
+        try:
+            days = int(input("How many days were they walked? In digits. "))
+            break
+        except ValueError:
+            print("Invalid input.")
+    return days
+
+def num_walks(dogs, days):
+    walks = dogs*days
+    return walks
+
+def total_charge(walks):
+    cost = walks*4
+    return cost
+
+def invoice(dogs, days, walks, cost):
+    print(f"There were {dogs} dogs, walked for {days} days for a total of {walks}"
+    ,f"walks, at £4.00 per walks this costs £{cost}.")
+
+total_dogs = num_dogs()
+total_days = num_days()
+total_walks = num_walks(total_dogs,total_days)
+total_cost = total_charge(total_walks)
+invoice(total_dogs, total_days, total_walks, total_cost)
