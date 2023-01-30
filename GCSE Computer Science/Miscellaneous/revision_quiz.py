@@ -57,6 +57,26 @@ hardware_questions = {
         "question": "True or False - Optical storage devices have no moving parts.",
         "answer": "False"
     },
+    11: {
+        "question": "How much 20MB files can fit into a 4TB drive?(Don't include commas)",
+        "answer": "200000"
+    },
+    12: {
+        "question": "True or False - A CPU with 4x cores wont always have 4x performance.",
+        "answer": "True"
+    },
+    13: {
+        "question": "what type of device is a mouse?(Input/Output)",
+        "answer": "Input"
+    },
+    14: {
+        "question": "Which would a mobile phone use, RISC or CISC.",
+        "answer": "Risc"
+    },
+    15: {
+        "question": "What hardware component is used to produce high-quality images (abbreviation)?",
+        "answer": "Gpu"
+    },
 }
 
 network_questions = {
@@ -136,7 +156,6 @@ def quiz_selection(score):
                 name = input(
                     "Your score will be added to the leaderboard.\nEnter your name: ")
                 NAME_CHOSEN = True
-                intro()
             leaderboard.update({name.capitalize(): score})
             # Updates the value of a key if it already exists or adds a new one if it doesn't.
             if name == "":
