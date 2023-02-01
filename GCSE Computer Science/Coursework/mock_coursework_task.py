@@ -19,7 +19,7 @@ def intro():
           "You will be asked a series of questions to determine the price of your ticket.",
           "press any key to continue...", sep="\n")
     input()
-    sleep(2)
+    sleep(1)
     main_menu()
 
 
@@ -42,7 +42,7 @@ def purchases():
     total_tickets = adult_tickets + child_tickets + senior_tickets
 
     total_wristbands = int(
-        input("How many wristbands would you like to purchase?"))
+        input("How many wristbands would you like to purchase? (1 wristband = £20) )"))
 
     total_price = (adult_tickets * ticket_prices["adult"]) + (
         child_tickets * ticket_prices["child"]) + (senior_tickets * ticket_prices["senior"] + (total_wristbands * 20))
@@ -123,12 +123,11 @@ def main_menu():
         INTRO_HAS_RAN = True
         intro()
 
-    user_input = 2
-    int(input("Please select an option from the menu below:"
-              "\n1. See entrance ticket prices"
-              "\n2. Buy tickets"
-              "\n3. Exit"
-              "\n> "))
+    user_input = int(input("Please select an option from the menu below:"
+                           "\n1. See entrance ticket prices"
+                           "\n2. Buy tickets"
+                           "\n3. Exit"
+                           "\n> "))
     sleep(1)
     if user_input == 1:
         ticket_price_view()
