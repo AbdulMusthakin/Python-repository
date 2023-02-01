@@ -4,6 +4,8 @@ from secrets import token_hex
 
 INTRO_HAS_RAN = False
 
+tickets_purchased_today = 0
+
 ticket_prices = {
     "adult": 20,
     "child": 12,
@@ -78,10 +80,10 @@ def purchases():
             print("Please enter a valid number.")
             sleep(1)
     sleep(1)
-        
+
     total_tickets = adult_tickets + child_tickets + senior_tickets
     if total_tickets > 30:
-        print("You can only purchase a maximum of 30 tickets. Please try again.")
+        print("You can only purchase a maximum of 30 tickets. Ticket purchasing will restart.")
         sleep(1)
         return purchases()
 
@@ -120,7 +122,8 @@ def purchases():
     parking_pass = False
     while valid == False:
         try:
-            parking_pass = input("Would you like a parking pass? (y/n) ").lower() == "y"
+            parking_pass = input(
+                "Would you like a parking pass? (y/n) ").lower()
             if parking_pass == "y" or parking_pass == "n":
                 parking_pass = True if parking_pass == "y" else False
                 valid = True
@@ -137,7 +140,7 @@ def purchases():
         if len(occupied_parking_spaces) >= 255:
             print("There are no more parking spaces available.")
         else:
-            while current_parking_space := token_hex(1) in occupied_parking_spaces:
+            while (current_parking_space := token_hex(1)) in occupied_parking_spaces:
                 pass
             print("Your parking space is:", current_parking_space)
             occupied_parking_spaces.append(current_parking_space)
@@ -158,7 +161,7 @@ def purchases():
             sleep(1)
 
     sleep(2)
-    return total_price, current_parking_space, broker_surname, total_tickets, total_wristbands, 
+    return total_price, current_parking_space, broker_surname, total_tickets, total_wristbands,
 
 
 def payment(price):
@@ -171,15 +174,15 @@ def payment(price):
     while valid == False:
         try:
             while total_paid < price:
-                    ten_pound_notes = int(
-                        input("Enter in the amount of £10 notes you are paying with: "))
-                    twenty_pound_notes = int(
-                        input("Enter in the amount of £20 notes you are paying with: "))
-                    
-                    total_paid = (ten_pound_notes * 10) + (twenty_pound_notes * 20)
-                    sleep(1)
-                    if total_paid < price:
-                        print("You have not paid enough. Please enter payment again.")
+                ten_pound_notes = int(
+                    input("Enter in the amount of £10 notes you are paying with: "))
+                twenty_pound_notes = int(
+                    input("Enter in the amount of £20 notes you are paying with: "))
+
+                total_paid = (ten_pound_notes * 10) + (twenty_pound_notes * 20)
+                sleep(1)
+                if total_paid < price:
+                    print("You have not paid enough. Please enter payment again.")
             valid = True
         except ValueError:
             print("Please enter a valid number. Payment will restart.")
@@ -211,12 +214,59 @@ def print_ticket(price, pspace, name, tickets, wristbands):
 
     sleep(1)
 
-    print(f"Parking Pass: {name} has been given permission to park in the private car park at {pspace}."
-            f"This pass becomes invalid after {date.today()}."
-            f"Please ensure that you park in the correct car park.", sep="\n")
+    print(f"Parking Pass: {name} has been given permission to park in the private car park at {pspace}.",
+          f"This pass becomes invalid after {date.today()}.",
+          f"Please ensure that you park in the correct car park.", sep="\n")
     sleep(2)
     print("Enjoy your day at Copington Adventure Theme Park!", "\n \n")
     sleep(2)
+
+
+def admin_tools():
+    valid = False
+    ticket_to_edit = ""
+    while valid == False:
+        try:
+            ticket_to_edit = input(
+                "Please enter the ticket number you would like to edit (1 : adult, 2 : child, 3 : senior): ")
+            if ticket_to_edit == "1":
+                ticket_to_edit = "adult"
+            elif ticket_to_edit == "2":
+                ticket_to_edit = "child"
+            elif ticket_to_edit == "3":
+                ticket_to_edit = "senior"
+            else:
+                raise ValueError
+            valid = True
+        except ValueError:
+            print("Please enter one of the valid numbers.")
+            sleep(1)
+        sleep(1)
+
+    valid = False
+    new_ticket_price = 0
+    while valid == False:
+        try:
+            new_ticket_price = int(
+                input("Please enter the new price for the ticket: "))
+            if new_ticket_price > 0:
+                valid = True
+            else:
+                raise ValueError
+        except ValueError:
+            print("Please enter a valid number.")
+            sleep(1)
+        sleep(1)
+
+    ticket_prices[ticket_to_edit] = new_ticket_price
+    print("The ticket price has been updated.")
+    sleep(1)
+
+    check_prices = input(
+        "Press 1 to see ticket prices, or press any other character to return to the main menu. ")
+    sleep(1)
+    if check_prices == "1":
+        return ticket_price_view()
 
 
 def main_menu():
@@ -224,6 +274,31 @@ def main_menu():
     if INTRO_HAS_RAN == False:
         INTRO_HAS_RAN = True
         intro()
+
+    password = "password1234"
+    entered_pass = ""
+    admin = input(
+        "Are you an admin? Press 'y' to access admin. Otherwise press any other character to continue. \n ").lower() == "y"
+    if admin == True:
+        for _ in range(3):
+            entered_pass = input(
+                "Please enter the password to access admin tools: ")
+            if entered_pass == password:
+                print("Correct password.")
+                sleep(1)
+                admin_tools()
+
+        if entered_pass != password:
+            print(
+                "You have entered the wrong password too many times. Returning to main menu.")
+            sleep(2)
+            return main_menu()
+
+    global tickets_purchased_today
+    if tickets_purchased_today >= 500:
+        print("Sorry, we have reached our maximum capacity for today.")
+        sleep(2)
+        return
 
     valid = False
     user_input = 0
@@ -259,6 +334,8 @@ def main_menu():
         print_ticket(total_price, current_parking_space, broker_surname,
                      total_tickets, total_wristbands)
         sleep(1)
+
+        tickets_purchased_today += total_tickets
 
     INTRO_HAS_RAN = False
     main_menu()
