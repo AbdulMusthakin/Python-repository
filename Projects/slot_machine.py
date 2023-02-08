@@ -1,8 +1,7 @@
-#WIP, Still Trying To Understand This
 import random
 
 
-MAX_LINES = 5
+MAX_LINES = 3
 MAX_BET = 100
 MIN_BET = 1
 
