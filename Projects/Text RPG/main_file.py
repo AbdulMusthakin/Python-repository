@@ -5,6 +5,8 @@
 import random
 from time import sleep
 import os
+import pickle
+
 
 
 # ------------------ Setting Map ------------------ #
@@ -66,7 +68,7 @@ class Zone(Map):
         self.is_player_here = False
 
     def __str__(self):
-        return f"Name: {self.name}, Description: {self.description}, Is Player Here: {self.is_player_here}"
+        return f"Name: {self.name}, Description: {self.description}"
 
     def check_border(self):
         loaded_zones = [self.name]
@@ -79,7 +81,7 @@ class Zone(Map):
         else:
             loaded_zones.append(split_name[0] + str(int(split_name[1]) - 1))
         
-        if split_name[1] == str(self.width): 
+        if split_name[1] == str(self.height): 
             at_bottom_border = True
         else:
             loaded_zones.append(split_name[0] + str(int(split_name[1]) + 1))
@@ -97,39 +99,63 @@ class Zone(Map):
 
         return at_top_border, at_bottom_border, at_left_border, at_right_border, loaded_zones
 
-    def up(self, at_top_border):
-        if at_top_border == False:
+    def up(self, game_data):
+        if game_data.tb == False:
             self.remove_player()
             split_name = [x for x in self.name]
-            (split_name[0] + str(int(split_name[1]) - 1)).place_player()
+            new_zone = Zone((split_name[0] + str(int(split_name[1]) - 1)), description=create_description())
+            new_zone.place_player()
         else:
             print("You can't go any further up.")
+            sleep(1)
+            move(game_data)
     
-    def down(self, at_bottom_border):
-        if at_bottom_border == False:
+    def down(self, game_data):
+        if game_data.bb == False:
             self.remove_player()
             split_name = [x for x in self.name]
-            (split_name[0] + str(int(split_name[1]) + 1)).place_player()
+            new_zone = Zone((split_name[0] + str(int(split_name[1]) + 1)), description=create_description())
+            new_zone.place_player()
         else:
             print("You can't go any further down.")
+            sleep(1)
+            move(game_data)
 
-    def left(self, at_left_border):
-        if at_left_border == False:
+    def left(self, game_data):
+        if game_data.lb == False:
             self.remove_player()
             split_name = [x for x in self.name]
-            (chr(ord(split_name[0]) - 1) + split_name[1]).place_player()
+            new_zone = Zone((chr(ord(split_name[0]) - 1) + split_name[1]), description=create_description())
+            new_zone.place_player()
         else:
             print("You can't go any further left.")
+            sleep(1)
+            move(game_data)
     
-    def right(self, at_right_border):
-        if at_right_border == False:
+    def right(self, game_data):
+        if game_data.rb == False:
             self.remove_player()
             split_name = [x for x in self.name]
-            (chr(ord(split_name[0]) + 1) + split_name[1]).place_player()
+            new_zone = Zone((chr(ord(split_name[0]) + 1) + split_name[1]), description=create_description())
+            new_zone.place_player()
         else:
             print("You can't go any further right.")
+            sleep(1)
+            move(game_data)
             
         
+# ------------------ Zone Descriptions ------------------ #
+
+# This function will create a description for the zone.
+# It will use a list of adjectives, nouns, and verbs to create a description.
+# For example, "This dark room smells clean."
+
+def create_description():
+    adjectives = ["dark", "mighty", "cold", "warm", "wet", "dry", "quiet", "loud", "smelly", "clean", "dirty", "empty", "full", "bright", "giant", "tiny", "unusual", "strange", "odd", "weird"]
+    nouns = ["room", "tower", "ruins", "bathroom", "bedroom", "hut", "fort", "basement", "attic", "garage", "closet", "office", "library", "garden", "yard", "field", "balcony", "staircase", "hallway", "hallway"]
+    verbs = ["smells", "feels", "looks", "sounds", "tastes", "seems", "feels", "looks", "sounds", "tastes", "smells", "feels", "looks", "sounds", "appears", "smells", "feels", "looks", "sounds", "tastes"]
+    
+    return f"This {random.choice(adjectives)} {random.choice(nouns)} {random.choice(verbs)} {random.choice(adjectives)}."
 
 # ------------------ Setting Character ------------------ #
 
@@ -188,9 +214,15 @@ def character_selection():
             pass
     player = eval(f"{chosen_class}('{name}')")
 
+    return player
+
 # ------------------ Stats ------------------ #
 
 def upgrade_stats(player):
+    if player.points == 0:
+        print("You have no points left.")
+        sleep(1)
+        return player
     print("Please select a stat to upgrade: ")
     print("1. Health")
     print("2. Attack")
@@ -236,30 +268,256 @@ def upgrade_stats(player):
         sleep(1)
         upgrade_stats(player)
 
+    return player
+
+# ------------------ Interact ------------------ #
+
+def interact(game_data):
+    print("What do you want to do?")
+    print("1. Move")
+    print("2. View stats")
+    print("3. Upgrade stats")
+    print("4. Save game")
+    print("5. Exit game")
+
+    user_input = input("> ")
+    sleep(1)
+    if user_input == "1":
+        move(game_data)
+        sleep(1)
+        interact(game_data)
+    elif user_input == "2":
+        print(game_data.player)
+        sleep(1)
+        interact(game_data)
+    elif user_input == "3":
+        game_data.player = upgrade_stats(game_data.player)
+        interact(game_data)
+    elif user_input == "4":
+        game_data.save_menu()
+        interact(game_data)
+    elif user_input == "5":
+        print("Do you want to save your game before exiting?(y/n)")
+        user_input2 = input("> ").lower()
+        if user_input2 == "y":
+            game_data.save_menu()
+        elif user_input2 == "n":
+            print("You have returned to main menu.")
+            game_data.game_is_running = False
+            sleep(1)
+            main_menu(game_data)
+        else:
+            print("Sorry, that is not a valid option. Please try again.\n")
+            sleep(1)
+            interact(game_data)
+    else:
+        print("Sorry, that is not a valid option. Please try again.\n")
+        sleep(1)
+        interact(game_data)
+
+# ------------------ Move ------------------ #
+
+def move(game_data):
+    print("Please select a direction to move in:")
+    print("1. Up")
+    print("2. Down")
+    print("3. Left")
+    print("4. Right")
+
+    user_input = input("> ")
+    sleep(1)
+    if user_input == "1":
+        game_data.zone.up(game_data)
+    elif user_input == "2":
+        game_data.zone.down(game_data)
+    elif user_input == "3":
+        game_data.zone.left(game_data)
+    elif user_input == "4":
+        game_data.zone.right(game_data)
+    else:
+        print("Sorry, that is not a valid option. Please pick the number associated with the direction.\n")
+        sleep(1)
+        return move(game_data)
+
+
 # ------------------ Start Game ------------------ #
 
 
 def start_game():
-    character_selection()
+    player = character_selection()
 
-    a1 = Zone("A1", is_player_here=True)
+    a1 = Zone("A1", is_player_here=True, description = "This is the starting zone, your adventure awaits.")
     tb, bb, lb, rb, loaded_zones = a1.check_border()
+    game_data = GameData(player, a1, tb, bb, lb, rb, loaded_zones, True)
+    print(a1)
+    interact(game_data)
 
 
+# ------------------ View Credits ------------------ #
+
+def view_credits(game_data):
+    print("--------------------------------")
+    print("           Credits:"             )
+    print("    Created by: Melon Man"       )
+    print("    Designed by: Melon Man"      )
+    print("   Illustrated by: Melon Man"    )
+    print("   Hope you enjoyed the game!"   )
+    print("--------------------------------")
+    sleep(5)
+    main_menu(game_data)
+
+
+
+# ------------------ Save Data ------------------ #
+
+class GameData:
+    def __init__(self, player, zone, tb, bb, lb, rb, loaded_zones, game_is_running):
+        self.player = player
+        self.zone = zone
+        self.tb = tb
+        self.bb = bb
+        self.lb = lb
+        self.rb = rb
+        self.loaded_zones = loaded_zones
+        self.game_is_running = game_is_running
+
+    def save_menu(self):
+        print("Do you want to import or export save data?")
+        print("1. Import")
+        print("2. Export")
+        print("3. Exit to Main Menu")
+        print("4. Exit to Game")
+
+        user_input = input("> ")
+        sleep(1)
+
+        if user_input == "1":
+            self.import_data()
+        elif user_input == "2":
+            self.export_data()
+        elif user_input == "3":
+            if self.game_is_running == True:
+                print("Do you not want to return back to the game? You may lose data. (y/n).")
+                user_input2 = input("> ").lower()
+                sleep(1)
+
+                if user_input2 == "y":
+                    print("Returning back to save menu.")
+                    sleep(1)
+                    self.game_is_running = False
+                    self.save_menu()            
+                elif user_input2 == "n":
+                    print("Returning back to game.")
+                    sleep(1)
+                    return self
+                else:
+                    print("Sorry, that is not a valid option. Please try again.\n")
+                    sleep(1)
+                    self.save_menu()
+            else:
+                print("You have exited the save menu.")
+                sleep(1)
+                main_menu(self)
+        
+        elif user_input == "4":
+            if self.game_is_running == True:
+                print("You have exited the save menu.")
+                sleep(1)
+                return self
+            else:
+                print("You are not currently running a game. Exiting to main menu.")
+                sleep(1)
+                main_menu(self)
+        else:
+            print("Sorry, that is not a valid option. Please try again.\n")
+            sleep(1)
+            self.save_menu()
+
+    def export_data(self):
+        print("Please enter the name of the save file you want to export to.(1, 2 or 3) Or enter 4 to exit.")
+        user_input = input("> ")
+        sleep(1)
+
+        if int(user_input) in range(1, 4):
+            print("Are you sure, this will overwrite the save file. (y/n)")
+            user_input2 = input("> ").lower()
+            sleep(1)
+
+            if user_input2 == "y":
+                with open(fr"Projects\Text RPG\Save Files\save{user_input}.txt", "wb") as file:
+                    pickle.dump(self, file)
+                    print(f"You have exported your save data to save{user_input}.txt")
+                    sleep(1)
+                self.save_menu()
+            elif user_input2 == "n":
+                print("You have exited the export menu.")
+                sleep(1)
+                self.save_menu()
+            else:
+                print("Sorry, that is not a valid option. Please try again.\n")
+                sleep(1)
+                self.export_data()
+        
+        elif user_input == "4":
+            print("You have exited the export menu.")
+            sleep(1)
+            self.save_menu()
+        else:
+            print("Sorry, that is not a valid option. Please try again.\n")
+            sleep(1)
+            self.export_data()
+
+    def import_data(self):
+        print("Please enter the name of the save file you want to import from.(1, 2 or 3) Or enter 4 to exit.")
+        user_input = input("> ")
+        sleep(1)
+
+        if int(user_input) in range(1, 4):
+            print("Are you sure, this will overwrite your current save. (y/n)")
+            user_input2 = input("> ").lower()
+            sleep(1)
+
+            if user_input2 == "y":
+                with open(fr"Projects\Text RPG\Save Files\save{user_input}.txt", "rb") as file:
+                    self = pickle.load(file)
+                    print(f"You have imported save{user_input}.txt")
+                    sleep(1)
+                self.save_menu()
+            elif user_input2 == "n":
+                print("You have exited the import menu.")
+                sleep(1)
+                self.save_menu()
+            else:
+                print("Sorry, that is not a valid option. Please try again.\n")
+                sleep(1)
+                self.import_data()
+        elif user_input == "4":
+            print("You have exited the import menu.")
+            sleep(1)
+            self.save_menu()
+        else:
+            print("Sorry, that is not a valid option. Please try again.\n")
+            sleep(1)
+            self.import_data()
+
+
+    def __str__(self):
+        return "Player: " + str(self.player) + ""
 
 
 
 # ------------------ Main Menu ------------------ #
 
-# This is the main menu that the player will see when they start the game.
-def main_menu():
+# This is the main menu that the game_data will see when they start the game.
+def main_menu(game_data):
     print("--------------------------------")
     print("Welcome To Melon Man's Text RPG!")
     print("--------------------------------")
     print("Please select an option:")
     print("1. Start game")
     print("2. Exit game")
-    # print("3. View credits")
+    print("3. View credits")
+    print("4. Open save menu")
     # print("4. View help")
     # print("5. View high scores")
     # print("6. View settings")
@@ -269,6 +527,8 @@ def main_menu():
     # print("10. View quests")
     # The above are placeholders currently
 
+    
+
     user_input = input("> ")
     sleep(1)
     if user_input == "1":
@@ -276,34 +536,38 @@ def main_menu():
         pass
     elif user_input == "2":
         exit()
-    # elif user_input == "3":
-    #     view_credits()
-    # elif user_input == "4":
-    #     view_help()
+    elif user_input == "3":
+        view_credits(game_data)
+    elif user_input == "4":
+        game_data.save_menu()
     # elif user_input == "5":
-    #     view_high_scores()
+    #     view_help()
     # elif user_input == "6":
-    #     view_settings()
+    #     view_high_scores()
     # elif user_input == "7":
-    #     view_achievements()
+    #     view_settings()
     # elif user_input == "8":
-    #     view_stats()
+    #     view_achievements()
     # elif user_input == "9":
-    #     view_inventory()
+    #     view_stats()
     # elif user_input == "10":
+    #     view_inventory()
+    # elif user_input == "11":
     #     view_quests()
     else:
         print("Sorry, that is not a valid option. Please try again.\n")
         sleep(1)
-        main_menu()
+        main_menu(game_data)
 
 
-#main_menu()
+main_menu(game_data=GameData(player=Warrior("Placeholder"), zone="A1", tb=True, bb=False, lb=True, rb=False, loaded_zones=[], game_is_running=False))
 
-# map = Map(5, 5)
-# print(map.create_detailed_map())
+#map = Map(26, 26)
+# for i in map.create_detailed_map().values():
+#     for j in i:
+#         print(str(j).strip("[]"))
 # a1 = Zone("A1")
 # a1.check_border()
-a1 = Zone("A1")
-tb, bb, lb, rb, loaded_zones = a1.check_border()
-print(tb, bb, lb, rb, loaded_zones)
+# a1 = Zone("A1")
+# tb, bb, lb, rb, loaded_zones = a1.check_border()
+# print(tb, bb, lb, rb, loaded_zones)
