@@ -52,21 +52,84 @@ class Map:
         return f"Width: {self.width}, Height: {self.height}"
     
 
-    class Zone:
-        def __init__(self, name, description="", is_player_here=False):
-            self.name = name
-            self.description = description
-            self.is_player_here = is_player_here
+class Zone(Map):
+    def __init__(self, name, description="", is_player_here=False, map=Map(5, 5)):
+        self.height = map.height
+        self.name = name
+        self.description = description
+        self.is_player_here = is_player_here
 
-        def place_player(self):
-            self.is_player_here = True
+    def place_player(self):
+        self.is_player_here = True
 
-        def remove_player(self):
-            self.is_player_here = False
+    def remove_player(self):
+        self.is_player_here = False
 
-        def __str__(self):
-            return f"Name: {self.name}, Description: {self.description}, Is Player Here: {self.is_player_here}"
+    def __str__(self):
+        return f"Name: {self.name}, Description: {self.description}, Is Player Here: {self.is_player_here}"
 
+    def check_border(self):
+        loaded_zones = [self.name]
+        at_top_border, at_bottom_border, at_left_border, at_right_border = False, False, False, False
+        split_name = [x for x in self.name]
+
+        
+        if split_name[1] == "1":
+            at_top_border = True
+        else:
+            loaded_zones.append(split_name[0] + str(int(split_name[1]) - 1))
+        
+        if split_name[1] == str(self.width): 
+            at_bottom_border = True
+        else:
+            loaded_zones.append(split_name[0] + str(int(split_name[1]) + 1))
+        
+        if split_name[0] == "A":
+            at_left_border = True
+        else:
+            loaded_zones.append(chr(ord(split_name[0]) - 1) + split_name[1])
+        
+        if split_name[0] == chr(self.height + 64):
+            at_right_border = True
+        else:
+            loaded_zones.append(chr(ord(split_name[0]) + 1) + split_name[1])        
+
+
+        return at_top_border, at_bottom_border, at_left_border, at_right_border, loaded_zones
+
+    def up(self, at_top_border):
+        if at_top_border == False:
+            self.remove_player()
+            split_name = [x for x in self.name]
+            (split_name[0] + str(int(split_name[1]) - 1)).place_player()
+        else:
+            print("You can't go any further up.")
+    
+    def down(self, at_bottom_border):
+        if at_bottom_border == False:
+            self.remove_player()
+            split_name = [x for x in self.name]
+            (split_name[0] + str(int(split_name[1]) + 1)).place_player()
+        else:
+            print("You can't go any further down.")
+
+    def left(self, at_left_border):
+        if at_left_border == False:
+            self.remove_player()
+            split_name = [x for x in self.name]
+            (chr(ord(split_name[0]) - 1) + split_name[1]).place_player()
+        else:
+            print("You can't go any further left.")
+    
+    def right(self, at_right_border):
+        if at_right_border == False:
+            self.remove_player()
+            split_name = [x for x in self.name]
+            (chr(ord(split_name[0]) + 1) + split_name[1]).place_player()
+        else:
+            print("You can't go any further right.")
+            
+        
 
 # ------------------ Setting Character ------------------ #
 
@@ -168,7 +231,6 @@ def upgrade_stats(player):
     elif user_input == "5":
         print("You have exited the upgrade menu.")
         sleep(1)
-        main_menu()
     else:
         print("Sorry, that is not a valid option. Please try again.\n")
         sleep(1)
@@ -179,6 +241,12 @@ def upgrade_stats(player):
 
 def start_game():
     character_selection()
+
+    a1 = Zone("A1", is_player_here=True)
+    tb, bb, lb, rb, loaded_zones = a1.check_border()
+
+
+
 
 
 # ------------------ Main Menu ------------------ #
@@ -232,5 +300,10 @@ def main_menu():
 
 #main_menu()
 
-map = Map(5, 5)
-print(map.create_detailed_map())
+# map = Map(5, 5)
+# print(map.create_detailed_map())
+# a1 = Zone("A1")
+# a1.check_border()
+a1 = Zone("A1")
+tb, bb, lb, rb, loaded_zones = a1.check_border()
+print(tb, bb, lb, rb, loaded_zones)
