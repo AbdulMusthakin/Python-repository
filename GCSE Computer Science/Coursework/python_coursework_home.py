@@ -29,7 +29,7 @@ def choose_tin_contents():
     user_input = input("If you wish to see the flavours, press '1', otherwise continue: ")
     if user_input:
         view_flavours()
-        return choose_tin_contents()x
+        return choose_tin_contents()
     
     valid = False
     flavour_to_add = ""
