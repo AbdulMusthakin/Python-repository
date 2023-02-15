@@ -31,7 +31,7 @@ class Map:
     def create_visual_map(self):
         for _ in range(self.height):
             self.visual_map.append(["□"] * self.width)
-
+    
     def create_detailed_map(self):
         # copy the dictionary detailed_map as current_detailed_map
 
