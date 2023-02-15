@@ -1,1 +1,0 @@
-Player: Class: Warrior, Name: bob, Health: 150, Attack: 15, Defense: 10, Magic: 5, Level: 0
