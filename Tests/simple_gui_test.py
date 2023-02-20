@@ -1,13 +1,19 @@
 import tkinter
 
-# Create the main window.
-main_window = tkinter.Tk()
+# How would I have my text rpg game run in a window?
+# I would need to create a window, and then have the game run in that window.
+# I would need to create a window, and then have the game run in that window.
 
-# Create a label widget containing the text "Hello World".
-label = tkinter.Label(main_window, text="Hello World", font=("Arial", 72))
 
-# Pack the label.
-label.pack()
+class Display:
+    def __init__(self):
+        self.root = tkinter.Tk()
+        self.root.title("Text RPG")
+        self.root.geometry("800x600")
+        self.root.resizable()
 
-# Enter the tkinter main loop.
-tkinter.mainloop()
+        tkinter.Label(self.root, text="Welcome to the game!").pack()
+        tkinter.Button(self.root, text="Start Game").pack()
+        tkinter.Button(self.root, text="Load Game").pack()
+        tkinter.Button(self.root, text="Options").pack()
+        tkinter.Button(self.root, text="Quit").pack()
