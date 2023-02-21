@@ -1,3 +1,8 @@
+""" This is my attempt at doing my GCSE Computer Science coursework at home. I have to create a program that allows customers to choose the chocolate in their tin."""
+# TODO - Annotate the code
+
+NAME_ENTERED = False
+
 flavours = {1: "Caramel Twist",
             2: "Orange Crush",
             3: "Chocolate Bar",
@@ -10,9 +15,14 @@ flavours = {1: "Caramel Twist",
             10: "Coconut Dream"
             }
 
+print(flavours.keys())
+print(flavours.values())
 
 def view_flavours():
-    print(f"Here are the flavours of chocolates we have: \n{flavours.values()}")
+    print("Here are the flavours of chocolates we have:")
+    for i in flavours:
+        print(f"{i}. {flavours[i]}")
+          
     input("Press any key to continue: ")
 
 
@@ -31,65 +41,75 @@ def choose_tin_contents():
         view_flavours()
         return choose_tin_contents()
     
-    valid = False
-    flavour_to_add = ""
-    while valid == False:
-        try:
-            flavour_to_add = input("Please either enter the corresponding number or name of the flavour to add: ")
-
-            if flavour_to_add.title() not in flavours.values():
-                print("Sorry, we don't recognsie that flavour. Please try again.")
-                raise ValueError
-
-            if flavour_to_add not in flavours.keys():
-                print("Sorry, we don't recognsie that flavour. Please try again.")
-                raise ValueError
-            else:
-                confirm = input(f"You have chosen {flavour_to_add}. Press 'y' to confirm, otherwise retry: ").lower()
-                if confirm == "y":
+    order = {}
+    while sum(order.values()) < 1000:
+        valid = False
+        flavour_to_add = ""
+        while valid == False:
+            try:
+                flavour_to_add = input("Please either enter the corresponding number or name of the flavour to add: ").title()
+                
+                if flavour_to_add.isdigit():
+                    
+                    if int(flavour_to_add) in flavours:
+                        flavour_to_add = flavours[int(flavour_to_add)]
+                        valid = True
+                    else:
+                        print("Please enter a valid number.")
+                        raise ValueError
+                
+                if flavour_to_add in flavours.values():
                     valid = True
                 else:
+                    print("Please enter a valid flavour.")
+                    raise ValueError 
+            except ValueError:
+                pass
+        
+        # User can add amount in increments of 100g
+        
+        valid = False
+        amount_to_add = 0
+        while valid == False:
+            try:
+                amount_to_add = int(input("Please enter the amount you wish to add (Make sure it is divisible by 100): "))
+                
+                if amount_to_add <= 0:
+                    print("Please enter a valid amount.")
                     raise ValueError
-            if flavour_to_add.isdigit():
-                flavour_to_add = int(flavour_to_add)
-                confirm = input(f"You have chosen {flavours[flavour_to_add]}. Press 'y' to confirm, otherwise retry: ").lower()
-                if confirm == "y":
-                    valid = True
+
+                if 100 <= amount_to_add <= 500:
+                    pass 
                 else:
+                    print("You have to have at least 100g and no more than 500g.")
                     raise ValueError
-            valid = True
-        except ValueError:
-            pass
+                
+                if amount_to_add % 100 == 0:
+                    user_input = input(f"You have chosen to add {amount_to_add}g of {flavour_to_add}. Press 'y' to confirm, otherwise retry: ").lower()
+                    if user_input == "y":
+                        valid = True
+                    else:
+                        raise ValueError
+                else:
+                    print("Please enter a valid amount.")
+                    raise ValueError
+
+                valid = True
+            except ValueError:
+                pass
+        
+        order.update({flavour_to_add: amount_to_add})
     
-    # User can add amount in increments of 100g
-    
-    valid = False
-    amount_to_add = 0
-    while valid == False:
-        try:
-            amount_to_add = int(input("Please enter the amount you wish to add (Make sure it is in increments of 100g): "))
-            if amount_to_add % 100 == 0:
-                user_input = input(f"You have chosen to add {amount_to_add}g of {flavour_to_add}. Press 'y' to confirm, otherwise retry: ").lower()
-                if user_input == "y":
-                    valid = True
-                else:
-                    raise ValueError
-            else:
-                print("Please enter a valid amount.")
-                raise ValueError
-
-            if 100 <= amount_to_add <= 500:
-                valid = True 
-            else:
-                print("You have to have at least 100g and no more than 500g.")
-                raise ValueError
-        except ValueError:
-            pass
+    return order
 
  
 def main_menu():
     # First we will have the customer enter and store their details
-    get_customer_details()
+    global NAME_ENTERED
+    if NAME_ENTERED == False:
+        get_customer_details()
+        NAME_ENTERED = True
+        
 
     # The customer can view the different flavours of chocolates or chooce their tin contents
 
@@ -98,8 +118,10 @@ def main_menu():
 
     if user_input == "1":
         view_flavours()
+        main_menu()
     if user_input == "2":
-        choose_tin_contents()
+        order = choose_tin_contents()
+        print(order)
     if user_input == "3":
         pass
 
