@@ -50,7 +50,6 @@ def choose_tin_contents():
                     valid = True
                 else:
                     raise ValueError
-            
             if flavour_to_add.isdigit():
                 flavour_to_add = int(flavour_to_add)
                 confirm = input(f"You have chosen {flavours[flavour_to_add]}. Press 'y' to confirm, otherwise retry: ").lower()
@@ -58,9 +57,34 @@ def choose_tin_contents():
                     valid = True
                 else:
                     raise ValueError
+            valid = True
         except ValueError:
             pass
     
+    # User can add amount in increments of 100g
+    
+    valid = False
+    amount_to_add = 0
+    while valid == False:
+        try:
+            amount_to_add = int(input("Please enter the amount you wish to add (Make sure it is in increments of 100g): "))
+            if amount_to_add % 100 == 0:
+                user_input = input(f"You have chosen to add {amount_to_add}g of {flavour_to_add}. Press 'y' to confirm, otherwise retry: ").lower()
+                if user_input == "y":
+                    valid = True
+                else:
+                    raise ValueError
+            else:
+                print("Please enter a valid amount.")
+                raise ValueError
+
+            if 100 <= amount_to_add <= 500:
+                valid = True 
+            else:
+                print("You have to have at least 100g and no more than 500g.")
+                raise ValueError
+        except ValueError:
+            pass
 
  
 def main_menu():
