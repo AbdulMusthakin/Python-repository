@@ -226,75 +226,90 @@ def admin_menu(password="password"):
         print("Incorrect password.")
         return
 
-    # Fufills the requirements of the coursework: search customer details by order number, retrieve all customer orders for preparation and despatch
-    user_input = input("Press 1 to search for customer details by order number, press 2 to retrieve all customer orders for preparation and despatch: ")
-    sleep(1)
-    
-    if user_input == "1":
-        # * Fulfills the requirements of the coursework: search customer details by order number
-        order_number = int(input("Please enter the order number: "))
-        with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
-            lines = file.readlines() # Gets all the lines in the file in a list.
-            lines = [line.strip() for line in lines] # Removes the newline character from each line.
-            print(lines) # Testing
-            line_with_order = lines[order_number-1] # Gets the line with the order number. -1 because the order number starts at 1, but the index starts at 0.
-        
-            valid = False
-            detail_to_get = ""
-            while valid == False:
-                try:
-                    detail_to_get = input("Enter 1 for name, 2 for order, 3 for cost, 4 for message: ")
-                    sleep(1)
-                    
-                    # split turns the line into a list, with each item being separated by a comma. We then get the item at the index specified by the user.
-                    if detail_to_get == "1":
-                        print(line_with_order.split(", ")[0])
-                    elif detail_to_get == "2":
-                        print(line_with_order.split(", ")[1])
-                    elif detail_to_get == "3":
-                        print(line_with_order.split(", ")[2])
-                    elif detail_to_get == "4":
-                        print(line_with_order.split(", ")[3])
-                    else:
-                        print("Invalid input.")
-                        sleep(1)
-                        raise ValueError
-                    valid = True
-                except IndexError:
-                    print("There appears to be a problem with the file. Please check the file.")
-                    valid = True
-                except ValueError:
-                    pass
 
-    elif user_input == "2":
-        # * Fulfills the requirements of the coursework: retrieve all customer orders for preparation and despatch
-        
-        # We will get the sum of all the cost of all the orders.
-        total_cost = 0
-        with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
-            lines = file.readlines()
-            lines = [line.strip() for line in lines]
-            for line in lines:
-                total_cost += float(line.split(", ")[2]) # We get the cost by splitting the line by the comma and then getting the third item in the list.
-        
-        # We will get how much of each flavour is needed (in grams).
-        flavours_needed = {flavours[i] : 0 for i in range(len(flavours))}
-        # We have used a dictionary comprehension to create a dictionary with the keys being the values of the flavours dictionary and the values being 0.
-        
-        with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
-            lines = file.readline() #
-            lines = [line.strip() for line in lines]
-            for line in lines:
-                flavour_and_quantity = line.split(", ")[1] # We get the flavour and quantity by splitting the line by the comma and then getting the second item in the list.
-                flavour = flavour_and_quantity.split(" ")[0] # We get the flavour by splitting the string by the space and then getting the first item in the list.
-                quantity = int(flavour_and_quantity.split(" ")[1]) # We get the quantity by splitting the string by the space and then getting the second item in the list.
-                flavours_needed[flavour] += quantity # We add the quantity to the value of the key.
+
+    # Fufills the requirements of the coursework: search customer details by order number, retrieve all customer orders for preparation and despatch
+
+    valid = False
+    user_input = ""
+    while valid == False:
+        try:
+            user_input = input("Press 1 to search for customer details by order number, press 2 to retrieve all customer orders for preparation and despatch: ")
+            sleep(1)
             
-        print(f"Total cost: £{total_cost}")
-        print("Flavours needed:")
-        for flavour, quantity in flavours_needed.items():
-            print(f"{flavour}: {quantity}g")
+            if user_input == "1":
+                # * Fulfills the requirements of the coursework: search customer details by order number
+                order_number = int(input("Please enter the order number: "))
+                with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
+                    lines = file.readlines() # Gets all the lines in the file in a list.
+                    lines = [line.strip() for line in lines] # Removes the newline character from each line.
+
+                    line_with_order = lines[order_number-1] # Gets the line with the order number. -1 because the order number starts at 1, but the index starts at 0.
+                
+                    valid = False
+                    detail_to_get = ""
+                    while valid == False:
+                        try:
+                            detail_to_get = input("Enter 1 for name, 2 for order, 3 for cost, 4 for message: ")
+                            sleep(1)
+                            
+                            # split turns the line into a list, with each item being separated by a comma. We then get the item at the index specified by the user.
+                            if detail_to_get == "1":
+                                print(line_with_order.split(", ")[0])
+                            elif detail_to_get == "2":
+                                print(line_with_order.split(", ")[1])
+                            elif detail_to_get == "3":
+                                print(line_with_order.split(", ")[2])
+                            elif detail_to_get == "4":
+                                print(line_with_order.split(", ")[3])
+                            else:
+                                print("Invalid input.")
+                                sleep(1)
+                                raise ValueError
+                            valid = True
+                        except IndexError:
+                            print("There appears to be a problem with the file. Please check the file.")
+                            valid = True
+                        except ValueError:
+                            pass
+
+            elif user_input == "2":
+                # * Fulfills the requirements of the coursework: retrieve all customer orders for preparation and despatch
+                
+                # We will get the sum of all the cost of all the orders.
+                total_cost = 0
+                with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
+                    lines = file.readlines()
+                    lines = [line.strip() for line in lines]
+                    for line in lines:
+                        print(line.split(", ")[2])
+                        cost = float(line.split(", ")[2]) # ! Need to fix this.
+                        total_cost += float(cost) 
+                
+                # We will get how much of each flavour is needed (in grams).
+                flavours_needed = {flavours[i] : 0 for i in range(len(flavours))}
+                # We have used a dictionary comprehension to create a dictionary with the keys being the values of the flavours dictionary and the values being 0.
+                
+                with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
+                    lines = file.readline() #
+                    lines = [line.strip() for line in lines]
+                    for line in lines:
+                        flavour_and_quantity = line.split(", ")[1] # We get the flavour and quantity by splitting the line by the comma and then getting the second item in the list.
+                        flavour = flavour_and_quantity.split(" ")[0] # We get the flavour by splitting the string by the space and then getting the first item in the list.
+                        quantity = int(flavour_and_quantity.split(" ")[1]) # We get the quantity by splitting the string by the space and then getting the second item in the list.
+                        flavours_needed[flavour] += quantity # We add the quantity to the value of the key.
+                    
+                print(f"Total cost: £{total_cost}")
+                print("Flavours needed:")
+                for flavour, quantity in flavours_needed.items():
+                    print(f"{flavour}: {quantity}g")
         
+            else:
+                print("Invalid input.")
+                sleep(1)
+                raise ValueError
+        except ValueError:
+            pass
         
 def main_menu():
     # First we will have the customer enter and store their details.
