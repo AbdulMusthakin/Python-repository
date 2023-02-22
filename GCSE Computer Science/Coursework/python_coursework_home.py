@@ -43,7 +43,6 @@ def get_customer_details():
         details_to_add = {total_customers + 1: customer_name}
         # This number is used to identify the customer. It is the number of customers in the file plus 1, as you are adding a new customer.
         file.write(f"{str(details_to_add)} \n")
-        sleep(1)
         # Converts to string so you can add to file, the \n is to make a new line.
 
 
@@ -210,8 +209,24 @@ def create_invoice(message, full_message, tin_cost=TIN_COST, delivery_cost=DELIV
 
     return invoice
 
-def admin_menu():
-    pass
+def admin_menu(password="password"):
+    input_pass = input("Please enter the password: ")
+    if input_pass != password:
+        print("Incorrect password.")
+        return
+
+    # Fufills the requirements of the coursework: search customer details by order number, retrieve all customer orders for preparation and despatch
+    user_input = input("Press 1 to search for customer details by order number, press 2 to retrieve all customer orders for preparation and despatch: ")
+    if user_input == "1":
+        # * Fulfills the requirements of the coursework: search customer details by order number
+        order_number = int(input("Please enter the order number: "))
+        with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
+            lines = file.readlines() # Gets all the lines in the file in a list.
+            lines = [line.strip() for line in lines] # Removes the newline character from each line.
+            print(lines) # Testing
+            line_with_order = lines[order_number-1] # Gets the line with the order number. -1 because the order number starts at 1, but the index starts at 0.
+            
+            print(line_with_order)
 
 def main_menu():
     # First we will have the customer enter and store their details.
@@ -250,7 +265,7 @@ def main_menu():
         print(invoice)
     elif user_input == "3":
         pass  # Everything in the function after this is in an else statement so it will not be executed if this is and the program will exit.
-    elif user_input == "admin":
+    elif user_input.lower() == "admin":
         # This is to fufill these requirements of the coursework:
         # * Search customer details by order number
         # * Retrieve all customer orders for preparation and despatch
