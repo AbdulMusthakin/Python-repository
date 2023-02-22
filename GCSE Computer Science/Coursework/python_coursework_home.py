@@ -16,7 +16,7 @@ flavours = {
     7: "Orange Smoothie",
     8: "Toffee Bar",
     9: "Hazelnut Triangle",
-    10: "Coconut Dream"
+    10: "Coconut Dream",
 }
 
 
@@ -38,8 +38,10 @@ def get_customer_details():
         # * Search customer details by order number
         # * Retrieve all customer orders for preparation and despatch
         return admin_menu()
-    
-    with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r+") as file:
+
+    with open(
+        r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r+"
+    ) as file:
         # The r before the string is to make sure the string is a raw string, this is because the backslash is used to escape characters.
         # r+ means that the file is opened for both reading and writing.
         customer_details = file.readlines()
@@ -53,7 +55,8 @@ def get_customer_details():
 
 def choose_tin_contents():
     user_input = input(
-        "If you wish to see the flavours, press '1', otherwise continue: ")
+        "If you wish to see the flavours, press '1', otherwise continue: "
+    )
     sleep(1)
     if user_input == "1":
         view_flavours()
@@ -70,7 +73,8 @@ def choose_tin_contents():
             try:
                 # All the flavours in the dictionary are stored as first letter uppercase so the input is also made uppercase.
                 flavour_to_add = input(
-                    "Please either enter the corresponding number or name of the flavour to add: ").title()
+                    "Please either enter the corresponding number or name of the flavour to add: "
+                ).title()
                 sleep(1)
 
                 if flavour_to_add.isdigit():
@@ -117,8 +121,11 @@ def choose_tin_contents():
         # This acts the same as the previous while loop, preventing the user from entering an invalid amount.
         while valid == False:
             try:
-                amount_to_add = int(input(
-                    "Please enter the amount you wish to add (Make sure it is divisible by 100): "))
+                amount_to_add = int(
+                    input(
+                        "Please enter the amount you wish to add (Make sure it is divisible by 100): "
+                    )
+                )
                 sleep(1)
 
                 if amount_to_add <= 0:
@@ -142,7 +149,8 @@ def choose_tin_contents():
                 if amount_to_add % 100 == 0:
                     # They can only add amounts in increments of 100g.
                     user_input = input(
-                        f"You have chosen to add {amount_to_add}g of {flavour_to_add}. Press 'y' to confirm, otherwise retry: ").lower()
+                        f"You have chosen to add {amount_to_add}g of {flavour_to_add}. Press 'y' to confirm, otherwise retry: "
+                    ).lower()
                     sleep(1)
 
                     if user_input == "y":
@@ -173,15 +181,17 @@ def choose_tin_contents():
 
 
 def store_order(order, cost, message):
-    with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r+") as file:
+    with open(
+        r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r+"
+    ) as file:
         lines = file.readlines()
         last_line = lines[-1]  # Gets the last line in the file.
         # Add order to the last line.
         last_line = last_line[:-2]  # Removes the newline character
-        last_line += f", {str(order)}"  # Adds the order to the last line.
-        last_line += f", {str(cost.__round__(2))}"  # Adds the cost to the last line.
-        last_line += f", {message}\n"  # Adds the message to the last line.
-        
+        last_line += f"; {str(order)}"  # Adds the order to the last line.
+        last_line += f"; {str(cost.__round__(2))}"  # Adds the cost to the last line.
+        last_line += f"; {message}\n"  # Adds the message to the last line.
+
         lines[-1] = last_line  # Replaces the last line with the new one.
         file.seek(0)  # Goes to the start of the file.
         file.writelines(lines)  # Writes the new lines to the file.
@@ -189,7 +199,8 @@ def store_order(order, cost, message):
 
 def choose_personalised_message():
     user_input = input(
-        "Would you like to add a personalised message? Press 'y' for yes, otherwise press any other key: ").lower()
+        "Would you like to add a personalised message? Press 'y' for yes, otherwise press any other key: "
+    ).lower()
     sleep(1)
 
     if user_input == "y":
@@ -202,7 +213,9 @@ def choose_personalised_message():
         return ""
 
 
-def create_invoice(message, full_message, tin_cost=TIN_COST, delivery_cost=DELIVERY_COST):
+def create_invoice(
+    message, full_message, tin_cost=TIN_COST, delivery_cost=DELIVERY_COST
+):
 
     # First, we remove the whitespace from the message and then calculate the cost of the message.
     message.replace(" ", "")  # Replace all the whitespace with nothing.
@@ -217,100 +230,134 @@ def create_invoice(message, full_message, tin_cost=TIN_COST, delivery_cost=DELIV
 
     return invoice, total_cost
 
+
 def admin_menu(password="password"):
     print("Please enter the password: ")
     input_pass = input("> ")
     sleep(1)
-    
+
     if input_pass != password:
         print("Incorrect password.")
-        return
-
-
+        exit()
 
     # Fufills the requirements of the coursework: search customer details by order number, retrieve all customer orders for preparation and despatch
 
-    valid = False
     user_input = ""
-    while valid == False:
+    while True:
         try:
-            user_input = input("Press 1 to search for customer details by order number, press 2 to retrieve all customer orders for preparation and despatch: ")
+            user_input = input(
+                "Press 1 to search for customer details by order number, press 2 to retrieve all customer orders for preparation and despatch or press 3 to exit: "
+            )
             sleep(1)
-            
+
             if user_input == "1":
                 # * Fulfills the requirements of the coursework: search customer details by order number
                 order_number = int(input("Please enter the order number: "))
-                with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
-                    lines = file.readlines() # Gets all the lines in the file in a list.
-                    lines = [line.strip() for line in lines] # Removes the newline character from each line.
+                with open(
+                    r"GCSE Computer Science\Text Files\coursework\customer_details.txt",
+                    "r",
+                ) as file:
+                    lines = (
+                        file.readlines()
+                    )  # Gets all the lines in the file in a list.
+                    lines = [
+                        line.strip() for line in lines
+                    ]  # Removes the newline character from each line.
 
-                    line_with_order = lines[order_number-1] # Gets the line with the order number. -1 because the order number starts at 1, but the index starts at 0.
-                
+                    line_with_order = lines[
+                        order_number - 1
+                    ]  # Gets the line with the order number. -1 because the order number starts at 1, but the index starts at 0.
+
                     valid = False
                     detail_to_get = ""
-                    while valid == False:
+                    while (
+                        valid == True
+                    ):  # Loop will run forever until the user enters 5 to exit (or gets index error).
                         try:
-                            detail_to_get = input("Enter 1 for name, 2 for order, 3 for cost, 4 for message: ")
+                            detail_to_get = input(
+                                "Enter 1 for name, 2 for order, 3 for cost, 4 for message, 5 to exit: "
+                            )
                             sleep(1)
-                            
-                            # split turns the line into a list, with each item being separated by a comma. We then get the item at the index specified by the user.
+
+                            # split turns the line into a list, with each item being separated by a semicolon. We then get the item at the index specified by the user.
                             if detail_to_get == "1":
-                                print(line_with_order.split(", ")[0])
+                                print(line_with_order.split("; ")[0])
                             elif detail_to_get == "2":
-                                print(line_with_order.split(", ")[1])
+                                print(line_with_order.split("; ")[1])
                             elif detail_to_get == "3":
-                                print(line_with_order.split(", ")[2])
+                                print(line_with_order.split("; ")[2])
                             elif detail_to_get == "4":
-                                print(line_with_order.split(", ")[3])
+                                print(line_with_order.split("; ")[3])
+                            elif detail_to_get == "5":
+                                sleep(1)
+                                valid = True
                             else:
                                 print("Invalid input.")
                                 sleep(1)
                                 raise ValueError
-                            valid = True
                         except IndexError:
-                            print("There appears to be a problem with the file. Please check the file.")
+                            print(
+                                "There appears to be a problem with the file. Please check the file."
+                            )
                             valid = True
                         except ValueError:
                             pass
 
             elif user_input == "2":
                 # * Fulfills the requirements of the coursework: retrieve all customer orders for preparation and despatch
-                
+
                 # We will get the sum of all the cost of all the orders.
                 total_cost = 0
-                with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
+                with open(
+                    r"GCSE Computer Science\Text Files\coursework\customer_details.txt",
+                    "r",
+                ) as file:
                     lines = file.readlines()
                     lines = [line.strip() for line in lines]
+
                     for line in lines:
-                        print(line.split(", ")[2])
-                        cost = float(line.split(", ")[2]) # ! Need to fix this.
-                        total_cost += float(cost) 
-                
+                        cost = float(line.split(";")[2])
+                        total_cost += float(cost)
+
                 # We will get how much of each flavour is needed (in grams).
-                flavours_needed = {flavours[i] : 0 for i in range(len(flavours))}
+                flavours_needed = {flavours[i]: 0 for i in range(1, len(flavours) + 1)}
                 # We have used a dictionary comprehension to create a dictionary with the keys being the values of the flavours dictionary and the values being 0.
-                
-                with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
-                    lines = file.readline() #
+
+                with open(
+                    r"GCSE Computer Science\Text Files\coursework\customer_details.txt",
+                    "r",
+                ) as file:
+                    lines = file.readlines()  #
                     lines = [line.strip() for line in lines]
                     for line in lines:
-                        flavour_and_quantity = line.split(", ")[1] # We get the flavour and quantity by splitting the line by the comma and then getting the second item in the list.
-                        flavour = flavour_and_quantity.split(" ")[0] # We get the flavour by splitting the string by the space and then getting the first item in the list.
-                        quantity = int(flavour_and_quantity.split(" ")[1]) # We get the quantity by splitting the string by the space and then getting the second item in the list.
-                        flavours_needed[flavour] += quantity # We add the quantity to the value of the key.
-                    
-                print(f"Total cost: £{total_cost}")
+                        flavour_and_quantity = line.split("; ")[1]
+                        # We get the order from the line and turn it into a dictionary.
+                        flavour_and_quantity = eval(
+                            flavour_and_quantity
+                        )  # eval() turns a string into a dictionary.
+
+                        for i in flavour_and_quantity:
+                            # We loop through the dictionary and add the quantity of each flavour to the total.
+                            flavours_needed[i] += flavour_and_quantity[i]
+
+                print(f"Total cost: £{total_cost.__round__(2)}")
+                sleep(1)
                 print("Flavours needed:")
+                sleep(1)
                 for flavour, quantity in flavours_needed.items():
                     print(f"{flavour}: {quantity}g")
-        
+                sleep(1)
+
+            elif user_input == "3":
+                exit()
             else:
                 print("Invalid input.")
                 sleep(1)
                 raise ValueError
         except ValueError:
             pass
-        
+
+
 def main_menu():
     # First we will have the customer enter and store their details.
     # This makes it so the customer is only asked for their details once.
@@ -321,7 +368,8 @@ def main_menu():
         NAME_ENTERED = True
 
     user_input = input(
-        "Press '1' to view the flavours of chocolates. Press '2' to choose the contents of your tin. Press '3' to exit:\n> ")
+        "Press '1' to view the flavours of chocolates. Press '2' to choose the contents of your tin. Press '3' to exit:\n> "
+    )
     sleep(1)
 
     if user_input == "1":
