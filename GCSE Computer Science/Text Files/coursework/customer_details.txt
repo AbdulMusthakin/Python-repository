@@ -1,5 +1,1 @@
-{1: 'Bob42'}, {'Caramel Twist': 400, 'Orange Crush': 400, 'Brazil Nut in Chocolate': 200}
-{2: 'Tim'}, {'Strawberry Treat': 500, 'Chocolate Bar': 400, 'Caramel Twist': 100}
-
-{4: 'Bob'} 
-{5: 'Bob'} 
+{1: 'Jeff'}, {'Caramel Twist': 400, 'Cornish Fudge': 500, 'Hazelnut Triangle': 100}, 15.38, test

@@ -33,7 +33,12 @@ def get_customer_details():
     # The title method makes the first letter of each word capital, useful for names.
     customer_name = input("Please enter your name: ").title()
     sleep(1)
-
+    if customer_name.lower() == "admin":
+        # This is to fufill these requirements of the coursework:
+        # * Search customer details by order number
+        # * Retrieve all customer orders for preparation and despatch
+        return admin_menu()
+    
     with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r+") as file:
         # The r before the string is to make sure the string is a raw string, this is because the backslash is used to escape characters.
         # r+ means that the file is opened for both reading and writing.
@@ -167,13 +172,16 @@ def choose_tin_contents():
         return choose_tin_contents()
 
 
-def store_order(order):
+def store_order(order, cost, message):
     with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r+") as file:
         lines = file.readlines()
         last_line = lines[-1]  # Gets the last line in the file.
         # Add order to the last line.
         last_line = last_line[:-2]  # Removes the newline character
-        last_line += f", {str(order)}\n"  # Adds the order to the last line.
+        last_line += f", {str(order)}"  # Adds the order to the last line.
+        last_line += f", {str(cost.__round__(2))}"  # Adds the cost to the last line.
+        last_line += f", {message}\n"  # Adds the message to the last line.
+        
         lines[-1] = last_line  # Replaces the last line with the new one.
         file.seek(0)  # Goes to the start of the file.
         file.writelines(lines)  # Writes the new lines to the file.
@@ -205,18 +213,23 @@ def create_invoice(message, full_message, tin_cost=TIN_COST, delivery_cost=DELIV
 
     # This prints the invoice.
 
-    invoice = f"Tin cost: £{tin_cost} \nDelivery cost: £{delivery_cost} \nCost of message: £{message_cost} \nTotal cost: £{total_cost} \nMessage:\n{full_message}"
+    invoice = f"Tin cost: £{tin_cost} \nDelivery cost: £{delivery_cost} \nCost of message: £{message_cost:.2f} \nTotal cost: £{total_cost} \nMessage:\n{full_message}"
 
-    return invoice
+    return invoice, total_cost
 
 def admin_menu(password="password"):
-    input_pass = input("Please enter the password: ")
+    print("Please enter the password: ")
+    input_pass = input("> ")
+    sleep(1)
+    
     if input_pass != password:
         print("Incorrect password.")
         return
 
     # Fufills the requirements of the coursework: search customer details by order number, retrieve all customer orders for preparation and despatch
     user_input = input("Press 1 to search for customer details by order number, press 2 to retrieve all customer orders for preparation and despatch: ")
+    sleep(1)
+    
     if user_input == "1":
         # * Fulfills the requirements of the coursework: search customer details by order number
         order_number = int(input("Please enter the order number: "))
@@ -225,9 +238,64 @@ def admin_menu(password="password"):
             lines = [line.strip() for line in lines] # Removes the newline character from each line.
             print(lines) # Testing
             line_with_order = lines[order_number-1] # Gets the line with the order number. -1 because the order number starts at 1, but the index starts at 0.
-            
-            print(line_with_order)
+        
+            valid = False
+            detail_to_get = ""
+            while valid == False:
+                try:
+                    detail_to_get = input("Enter 1 for name, 2 for order, 3 for cost, 4 for message: ")
+                    sleep(1)
+                    
+                    # split turns the line into a list, with each item being separated by a comma. We then get the item at the index specified by the user.
+                    if detail_to_get == "1":
+                        print(line_with_order.split(", ")[0])
+                    elif detail_to_get == "2":
+                        print(line_with_order.split(", ")[1])
+                    elif detail_to_get == "3":
+                        print(line_with_order.split(", ")[2])
+                    elif detail_to_get == "4":
+                        print(line_with_order.split(", ")[3])
+                    else:
+                        print("Invalid input.")
+                        sleep(1)
+                        raise ValueError
+                    valid = True
+                except IndexError:
+                    print("There appears to be a problem with the file. Please check the file.")
+                    valid = True
+                except ValueError:
+                    pass
 
+    elif user_input == "2":
+        # * Fulfills the requirements of the coursework: retrieve all customer orders for preparation and despatch
+        
+        # We will get the sum of all the cost of all the orders.
+        total_cost = 0
+        with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
+            lines = file.readlines()
+            lines = [line.strip() for line in lines]
+            for line in lines:
+                total_cost += float(line.split(", ")[2]) # We get the cost by splitting the line by the comma and then getting the third item in the list.
+        
+        # We will get how much of each flavour is needed (in grams).
+        flavours_needed = {flavours[i] : 0 for i in range(len(flavours))}
+        # We have used a dictionary comprehension to create a dictionary with the keys being the values of the flavours dictionary and the values being 0.
+        
+        with open(r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r") as file:
+            lines = file.readline() #
+            lines = [line.strip() for line in lines]
+            for line in lines:
+                flavour_and_quantity = line.split(", ")[1] # We get the flavour and quantity by splitting the line by the comma and then getting the second item in the list.
+                flavour = flavour_and_quantity.split(" ")[0] # We get the flavour by splitting the string by the space and then getting the first item in the list.
+                quantity = int(flavour_and_quantity.split(" ")[1]) # We get the quantity by splitting the string by the space and then getting the second item in the list.
+                flavours_needed[flavour] += quantity # We add the quantity to the value of the key.
+            
+        print(f"Total cost: £{total_cost}")
+        print("Flavours needed:")
+        for flavour, quantity in flavours_needed.items():
+            print(f"{flavour}: {quantity}g")
+        
+        
 def main_menu():
     # First we will have the customer enter and store their details.
     # This makes it so the customer is only asked for their details once.
@@ -249,27 +317,23 @@ def main_menu():
     elif user_input == "2":
         order = choose_tin_contents()
         print(f"Your order is:\n{order}")
-        sleep(1)
-        store_order(order)
-        sleep(1)
 
         message = choose_personalised_message()
         full_message = "Merry Christmas,\n" + message
 
         sleep(1)
         # Calculate the cost of the order and gives an invoice.
-        invoice = create_invoice(message, full_message)
+        invoice, cost = create_invoice(message, full_message)
         # I decided against having two seperate functions since I would have to return everything from the cost function and then pass it to the invoice function
 
-        "Your invoice is:\n"
+        # Store the order and the cost in the customer_details.txt file.
+        store_order(order, cost, message)
+        sleep(1)
+
+        print("Your invoice is:\n")
         print(invoice)
     elif user_input == "3":
         pass  # Everything in the function after this is in an else statement so it will not be executed if this is and the program will exit.
-    elif user_input.lower() == "admin":
-        # This is to fufill these requirements of the coursework:
-        # * Search customer details by order number
-        # * Retrieve all customer orders for preparation and despatch
-        admin_menu()
     else:
         print("Please enter a valid input.")
         sleep(1)
