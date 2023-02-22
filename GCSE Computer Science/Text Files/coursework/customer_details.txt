@@ -1,14 +1,2 @@
-{1: 'Test1'} 
-{2: 'Test2'} 
-{3: 'Test3'} 
-{4: 'Test4'}
-{5: 'Bob'} 
-{6: 'Bob'} 
-{7: 'Bob'} 
-{8: 'Bob'} 
-{9: 'Bob'} 
-{10: 'Bob'} 
-{11: 'Bob'} 
-{12: 'Bob'} 
-{13: 'Bob'} 
-{14: 'Bob'} 
+{1: 'Bob42'}, {'Caramel Twist': 400, 'Orange Crush': 400, 'Brazil Nut in Chocolate': 200}] 
+{2: 'Tim'}, {'Strawberry Treat': 500, 'Chocolate Bar': 400, 'Caramel Twist': 100}
