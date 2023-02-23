@@ -31,16 +31,31 @@ def view_flavours():
 
 def get_customer_details():
     # The title method makes the first letter of each word capital, useful for names.
-    customer_name = input("Please enter your name: ").title()
-    sleep(1)
+    customer_name = ""
+    valid = False
+    while valid == False:
+        try:
+            customer_name = input("Please enter your name: ").title()
+            sleep(1)
+            if (customer_name.replace(" ", "")).isalpha() == False:
+                # isalpha() returns True if all the characters in the string are letters, and if there is at least one character.
+                # We use replace to remove any spaces in the name, otherwise it would return False if the user entered their full name.
+                print("Please enter a valid name.")
+                sleep(1)
+                raise ValueError
+            valid = True
+        except ValueError:
+            pass
+
     if customer_name.lower() == "admin":
         # This is to fufill these requirements of the coursework:
         # * Search customer details by order number
         # * Retrieve all customer orders for preparation and despatch
         return admin_menu()
+    # The way to access admin menu is not publicly stated.
 
     with open(
-        r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r+"
+        r"GCSE Computer Science\Text Files\coursework\customer_details.csv", "r+"
     ) as file:
         # The r before the string is to make sure the string is a raw string, this is because the backslash is used to escape characters.
         # r+ means that the file is opened for both reading and writing.
@@ -182,7 +197,7 @@ def choose_tin_contents():
 
 def store_order(order, cost, message):
     with open(
-        r"GCSE Computer Science\Text Files\coursework\customer_details.txt", "r+"
+        r"GCSE Computer Science\Text Files\coursework\customer_details.csv", "r+"
     ) as file:
         lines = file.readlines()
         last_line = lines[-1]  # Gets the last line in the file.
@@ -190,7 +205,10 @@ def store_order(order, cost, message):
         last_line = last_line[:-2]  # Removes the newline character
         last_line += f"; {str(order)}"  # Adds the order to the last line.
         last_line += f"; {str(cost.__round__(2))}"  # Adds the cost to the last line.
-        last_line += f"; {message}\n"  # Adds the message to the last line.
+        if message != "":
+            last_line += f"; {message}\n"  # Adds the message to the last line.
+        else:
+            last_line += "; None\n"  # So It does't give an error if the user didn't add a message.
 
         lines[-1] = last_line  # Replaces the last line with the new one.
         file.seek(0)  # Goes to the start of the file.
@@ -254,24 +272,20 @@ def admin_menu(password="password"):
                 # * Fulfills the requirements of the coursework: search customer details by order number
                 order_number = int(input("Please enter the order number: "))
                 with open(
-                    r"GCSE Computer Science\Text Files\coursework\customer_details.txt",
+                    r"GCSE Computer Science\Text Files\coursework\customer_details.csv",
                     "r",
                 ) as file:
-                    lines = (
-                        file.readlines()
-                    )  # Gets all the lines in the file in a list.
-                    lines = [
-                        line.strip() for line in lines
-                    ]  # Removes the newline character from each line.
-
-                    line_with_order = lines[
-                        order_number - 1
-                    ]  # Gets the line with the order number. -1 because the order number starts at 1, but the index starts at 0.
+                    lines = file.readlines()
+                    # Gets all the lines in the file in a list.
+                    lines = [line.strip() for line in lines]
+                    # Removes the newline character from each line.
+                    line_with_order = lines[order_number - 1]
+                    # Gets the line with the order number. -1 because the order number starts at 1, but the index starts at 0.
 
                     valid = False
                     detail_to_get = ""
                     while (
-                        valid == True
+                        valid == False
                     ):  # Loop will run forever until the user enters 5 to exit (or gets index error).
                         try:
                             detail_to_get = input(
@@ -281,13 +295,13 @@ def admin_menu(password="password"):
 
                             # split turns the line into a list, with each item being separated by a semicolon. We then get the item at the index specified by the user.
                             if detail_to_get == "1":
-                                print(line_with_order.split("; ")[0])
+                                print(f"Name: {line_with_order.split('; ')[0]}")
                             elif detail_to_get == "2":
-                                print(line_with_order.split("; ")[1])
+                                print(f"Order: {line_with_order.split('; ')[1]}")
                             elif detail_to_get == "3":
-                                print(line_with_order.split("; ")[2])
+                                print(f"Cost: {line_with_order.split('; ')[2]}")
                             elif detail_to_get == "4":
-                                print(line_with_order.split("; ")[3])
+                                print(f"Message: {line_with_order.split('; ')[3]}")
                             elif detail_to_get == "5":
                                 sleep(1)
                                 valid = True
@@ -299,6 +313,9 @@ def admin_menu(password="password"):
                             print(
                                 "There appears to be a problem with the file. Please check the file."
                             )
+                            sleep(1)
+                            print("Perhaps a user has exited prematurely?")
+                            sleep(2)
                             valid = True
                         except ValueError:
                             pass
@@ -309,7 +326,7 @@ def admin_menu(password="password"):
                 # We will get the sum of all the cost of all the orders.
                 total_cost = 0
                 with open(
-                    r"GCSE Computer Science\Text Files\coursework\customer_details.txt",
+                    r"GCSE Computer Science\Text Files\coursework\customer_details.csv",
                     "r",
                 ) as file:
                     lines = file.readlines()
@@ -324,7 +341,7 @@ def admin_menu(password="password"):
                 # We have used a dictionary comprehension to create a dictionary with the keys being the values of the flavours dictionary and the values being 0.
 
                 with open(
-                    r"GCSE Computer Science\Text Files\coursework\customer_details.txt",
+                    r"GCSE Computer Science\Text Files\coursework\customer_details.csv",
                     "r",
                 ) as file:
                     lines = file.readlines()  #
@@ -340,12 +357,13 @@ def admin_menu(password="password"):
                             # We loop through the dictionary and add the quantity of each flavour to the total.
                             flavours_needed[i] += flavour_and_quantity[i]
 
-                print(f"Total cost: £{total_cost.__round__(2)}")
+                print(f"\nTotal cost: £{total_cost.__round__(2)}")
                 sleep(1)
                 print("Flavours needed:")
                 sleep(1)
                 for flavour, quantity in flavours_needed.items():
                     print(f"{flavour}: {quantity}g")
+                    sleep(0.5)
                 sleep(1)
 
             elif user_input == "3":
@@ -368,7 +386,7 @@ def main_menu():
         NAME_ENTERED = True
 
     user_input = input(
-        "Press '1' to view the flavours of chocolates. Press '2' to choose the contents of your tin. Press '3' to exit:\n> "
+        "Press '1' to view the flavours of chocolates. Press '2' to choose the contents of your tin:\n> "
     )
     sleep(1)
 
@@ -382,21 +400,21 @@ def main_menu():
         print(f"Your order is:\n{order}")
 
         message = choose_personalised_message()
-        full_message = "Merry Christmas,\n" + message
+        full_message = ""
+        if message != "":
+            full_message = "Merry Christmas,\n" + message
 
         sleep(1)
         # Calculate the cost of the order and gives an invoice.
         invoice, cost = create_invoice(message, full_message)
         # I decided against having two seperate functions since I would have to return everything from the cost function and then pass it to the invoice function
 
-        # Store the order and the cost in the customer_details.txt file.
+        # Store the order and the cost in the customer_details.csv file.
         store_order(order, cost, message)
         sleep(1)
 
         print("Your invoice is:\n")
         print(invoice)
-    elif user_input == "3":
-        pass  # Everything in the function after this is in an else statement so it will not be executed if this is and the program will exit.
     else:
         print("Please enter a valid input.")
         sleep(1)

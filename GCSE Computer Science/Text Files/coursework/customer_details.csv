@@ -1,3 +1,6 @@
 {1: 'Jeff'}; {'Caramel Twist': 400, 'Cornish Fudge': 500, 'Hazelnut Triangle': 100}; 15.38; test
 {2: 'Bob'}; {'Orange Crush': 200, 'Brazil Nut in Chocolate': 300, 'Coconut Dream': 500}; 16.28; test pls work
 {1: 'Jimmy'}; {'Caramel Twist': 100, 'Cornish Fudge': 500, 'Chocolate Bar': 400}; 15.38; test
+{4: 'Bartholomew'}; {'Coconut Dream': 500, 'Toffee Bar': 100, 'Orange Smoothie': 100, 'Strawberry Treat': 100, 'Cornish Fudge': 100, 'Brazil Nut in Chocolate': 100}; 17.18; test i hope this works
+{5: 'Jimbob'}; {'Caramel Twist': 500, 'Brazil Nut in Chocolate': 400, 'Hazelnut Triangle': 100}; 14.98; None
+{6: 'Billy Bob'}; {'Brazil Nut in Chocolate': 500, 'Orange Smoothie': 400, 'Coconut Dream': 100}; 14.98; None
