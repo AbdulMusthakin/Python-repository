@@ -1,7 +1,7 @@
 """ This is my attempt at doing my GCSE Computer Science coursework at home. I have to create a program that allows customers to choose the chocolate in their tin."""
 from time import sleep
 
-NAME_ENTERED = False
+
 TIN_COST = 9.99
 DELIVERY_COST = 4.99
 
@@ -172,7 +172,6 @@ def choose_tin_contents():
                     print("Please enter a valid amount.")
                     raise ValueError
 
-                valid = True
             except ValueError:
                 pass
 
