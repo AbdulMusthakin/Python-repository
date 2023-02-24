@@ -115,6 +115,7 @@ def choose_tin_contents():
                         raise ValueError
                 elif flavour_to_add in flavours.values():
                     # This if statement handles the case where the user enters the name of the flavour.
+
                     if flavour_to_add in order:
                         print("You already have this flavour in your tin.")
                         sleep(1)
@@ -142,12 +143,6 @@ def choose_tin_contents():
                     )
                 )
                 sleep(1)
-
-                if amount_to_add <= 0:
-                    # Checks if the user has entered a negative number or 0.
-                    print("Please enter a valid amount.")
-                    sleep(1)
-                    raise ValueError
 
                 if not 100 <= amount_to_add <= 500:
                     # This is the range of amounts the user can add for one flavour. They can add 100g, 200g, 300g, 400g or 500g.
