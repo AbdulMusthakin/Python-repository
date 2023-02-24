@@ -216,15 +216,27 @@ def store_order(order, cost, message):
 
 
 def choose_personalised_message():
+    print(
+        "You can add a personalised message to your tin. This includes 'Merry Christmas', then the recipient's name and anythign esle you want to add."
+    )
+    print(
+        "Remember, 'Merry Christmas' is free but every character after that costs 10p (not including spaces)."
+    )
     user_input = input(
         "Would you like to add a personalised message? Press 'y' for yes, otherwise press any other key: "
     ).lower()
     sleep(1)
 
     if user_input == "y":
-        message = input("Please enter your message: ")
+        recipient_name = input("Please enter the recipient's name: ")
+
+        message = input("Please enter anything else if you want: ")
         sleep(1)
-        return message
+        # We do this so the user doesn't have to have an additional message if they don't want one.
+        if message != "":
+            return recipient_name + ". " + message
+        else:
+            return recipient_name
     else:
         print("Returning to main menu.")
         sleep(1)
@@ -403,6 +415,8 @@ def main_menu():
         full_message = ""
         if message != "":
             full_message = "Merry Christmas,\n" + message
+        else:
+            full_message = "No message provided."
 
         sleep(1)
         # Calculate the cost of the order and gives an invoice.
