@@ -64,7 +64,7 @@ def get_customer_details():
         total_customers = len(customer_details)
         details_to_add = {total_customers + 1: customer_name}
         # This number is used to identify the customer. It is the number of customers in the file plus 1, as you are adding a new customer.
-        file.write(f"{str(details_to_add)} \n")
+        file.write(f"\n{str(details_to_add)} \n")
         # Converts to string so you can add to file, the \n is to make a new line.
 
 
@@ -356,9 +356,8 @@ def admin_menu(password="password"):
                     for line in lines:
                         flavour_and_quantity = line.split("; ")[1]
                         # We get the order from the line and turn it into a dictionary.
-                        flavour_and_quantity = eval(
-                            flavour_and_quantity
-                        )  # eval() turns a string into a dictionary.
+                        flavour_and_quantity = eval(flavour_and_quantity)
+                        # eval() turns a string into a dictionary.
 
                         for i in flavour_and_quantity:
                             # We loop through the dictionary and add the quantity of each flavour to the total.
@@ -383,14 +382,15 @@ def admin_menu(password="password"):
             pass
 
 
-def main_menu():
+def main_menu(name_entered=True):
     # First we will have the customer enter and store their details.
-    # This makes it so the customer is only asked for their details once.
-    global NAME_ENTERED
-    # Set to False at the start of the program and set to True after the customer has entered their details.
-    if NAME_ENTERED == False:
+
+    if name_entered == False:
         get_customer_details()
-        NAME_ENTERED = True
+    # We want this if statement to only be true once. We do this by using keyword arguments.
+    # The default value for the name_entered arg is True so this if statement will not run in those cases.
+    # The only time when it is False is when main_menu() is called for the first time.
+    # That is the only time the user will be asked for their name.
 
     user_input = input(
         "Press '1' to view the flavours of chocolates. Press '2' to choose the contents of your tin:\n> "
@@ -433,4 +433,4 @@ def main_menu():
 
 
 # The program is entirely modular, it all runs off the main_menu function and there is only one line of code outside functions.
-main_menu()
+main_menu(name_entered=False)
