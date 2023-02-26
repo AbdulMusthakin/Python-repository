@@ -1,36 +1,61 @@
-bill = input("Enter the bill amount: ")
+while True:
+    try:
+        bill = float(input("What is the total bill? "))
+        break
+    except ValueError:
+        print("Please enter a number")
 
-print("Do you want to tip a little, a lot, or not at all?")
-# Check if they entered a money symbol and remove it if they did
-if bill[0] in "$£€¥₹₽₿":
-    remove = bill[0]
-    bill = bill.replace(remove, "")
+while True:
+    try:
+        tip = input("Do you want to leave a tip? (y/n) ").lower()
+        if tip not in "yn":
+            raise ValueError
+        break
+    except ValueError:
+        print("Please enter y or n")
 
-tip = input("Enter 'l' for a lot, 's' for a little, or 'n' for not at all: ").lower()
-
-
-total_bill = 0
-if tip == 'l':
-    total_bill = float(bill) * 1.2
-elif tip == 's':
-    total_bill = float(bill) * 1.1
-elif tip == 'n':
-    total_bill = float(bill)
+if tip == "y":
+    while True:
+        try:
+            tip_percent = float(input("What percentage tip do you want to leave? "))
+            if tip_percent <= 0:
+                raise ValueError
+            break
+        except ValueError:
+            print("Please enter a valid number")
 else:
-    print("Invalid input.")
+    tip_percent = 0
 
-print(f"Your total bill is ${total_bill:.2f}.")
+tip_amount = bill * (tip_percent / 100)
 
-print("Do you want to split the bill?")
-split = input("Enter 'y' for yes or 'n' for no: ").lower()
-if split == 'y':
-    
-    amount_of_people = input("How many people are splitting the bill? ")
-    amount_per_person = float(total_bill) / int(amount_of_people)
-    print(f"Each person should pay ${amount_per_person:.2f}.")
-elif split == 'n':
-    print("Okay, no problem.")
+total = bill + tip_amount
+
+print(f"Tip amount: ${tip_amount:.2f}")
+
+while True:
+    try:
+        split = input("Are you splitting the bill? (y/n) ").lower()
+        if split not in "yn":
+            raise ValueError
+        break
+    except ValueError:
+        print("Please enter y or n")
+
+if split == "y":
+    while True:
+        try:
+            people = int(input("How many people are splitting the bill? "))
+            if people <= 0:
+                raise ValueError
+            break
+        except ValueError:
+            print("Please enter a valid number")
 else:
-    print("Invalid input.")
-    
-print("Thank you for using the tip calculator.")
+    people = 1
+
+split_amount = total / people
+
+print(f"Total amount: ${total:.2f}")
+print(f"Amount per person: ${split_amount:.2f}")
+
+print("Thank you for using the tip calculator!")
