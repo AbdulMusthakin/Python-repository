@@ -432,4 +432,6 @@ def main_menu(name_entered=True):
 
 
 # The program is entirely modular, it all runs off the main_menu function and there is only one line of code outside functions.
-main_menu(name_entered=False)
+if __name__ == "__main__":
+    # What this does is check if the file is being run directly or if it is being imported.
+    main_menu(name_entered=False)

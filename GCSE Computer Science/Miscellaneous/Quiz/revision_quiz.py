@@ -17,108 +17,78 @@ leaderboard = {
 hardware_questions = {
     # A nested dictionary. A dictionary that contains a dictionary.
     # Here, it's an index of each question and a dictionary containing a question and answer.
-    1: {
-        "question": "What does the R in ROM stand for?",
-        "answer": "Read"
-    },
-    2: {
-        "question": "What does ALU stand for?",
-        "answer": "Arithmetic Logic Unit"
-    },
-    3: {
-        "question": "What does the R in RAM stand for?",
-        "answer": "Random"
-    },
+    1: {"question": "What does the R in ROM stand for?", "answer": "Read"},
+    2: {"question": "What does ALU stand for?", "answer": "Arithmetic Logic Unit"},
+    3: {"question": "What does the R in RAM stand for?", "answer": "Random"},
     4: {
         "question": "Which type of main memory storage is closest to the CPU?",
-        "answer": "Registers"
+        "answer": "Registers",
     },
-    5: {
-        "question": "What is the fastest type of Cache?",
-        "answer": "L1"
-    },
+    5: {"question": "What is the fastest type of Cache?", "answer": "L1"},
     6: {
         "question": "What is the main circuit board of computers?",
-        "answer": "Motherboard"
+        "answer": "Motherboard",
     },
     7: {
         "question": "What's the architecture which many general purpose computers are based on?",
-        "answer": "Von Neumann Architecture"
+        "answer": "Von Neumann Architecture",
     },
     8: {
         "question": "What word describes RAM losing it's data when the computer is powered off?",
-        "answer": "Volatile"
+        "answer": "Volatile",
     },
-    9: {
-        "question": "What part of the computer is the BIOS stored?",
-        "answer": "Rom"
-    },
+    9: {"question": "What part of the computer is the BIOS stored?", "answer": "Rom"},
     10: {
         "question": "True or False - Optical storage devices have no moving parts.",
-        "answer": "False"
+        "answer": "False",
     },
     11: {
         "question": "How much 20MB files can fit into a 4TB drive?(Don't include commas)",
-        "answer": "200000"
+        "answer": "200000",
     },
     12: {
         "question": "True or False - A CPU with 4x cores wont always have 4x performance.",
-        "answer": "True"
+        "answer": "True",
     },
     13: {
         "question": "what type of device is a mouse?(Input/Output)",
-        "answer": "Input"
+        "answer": "Input",
     },
-    14: {
-        "question": "Which would a mobile phone use, RISC or CISC.",
-        "answer": "Risc"
-    },
+    14: {"question": "Which would a mobile phone use, RISC or CISC.", "answer": "Risc"},
     15: {
         "question": "What hardware component is used to produce high-quality images (abbreviation)?",
-        "answer": "Gpu"
+        "answer": "Gpu",
     },
 }
 
 network_questions = {
-    1: {
-        "question": "What represents the connections in a network?",
-        "answer": "Edges"
-    },
-    2: {
-        "question": "What represents the devices in a network?",
-        "answer": "Nodes"
-    },
+    1: {"question": "What represents the connections in a network?", "answer": "Edges"},
+    2: {"question": "What represents the devices in a network?", "answer": "Nodes"},
     3: {
         "question": "Can devices in peer-to-peer networks act as the client and server (Yes/No)?",
-        "answer": "Yes"
+        "answer": "Yes",
     },
-    4: {
-        "question": "What is the most common network topology?",
-        "answer": "Mesh"
-    },
+    4: {"question": "What is the most common network topology?", "answer": "Mesh"},
     5: {
         "question": "What is the top layer of the TCP/IP model?",
-        "answer": "Application Layer"
+        "answer": "Application Layer",
     },
-    6: {
-        "question": "What is the cheapest network topology?",
-        "answer": "Bus"
-    },
+    6: {"question": "What is the cheapest network topology?", "answer": "Bus"},
     7: {
         "question": "Which of these is a Link Layer Protcol: UDP, WIFI, IP, TCP, IMAP",
-        "answer": "Wifi"
+        "answer": "Wifi",
     },
     8: {
         "question": "What type of tranmission media has the highest bandwith?",
-        "answer": "Fibre Optic"
+        "answer": "Fibre Optic",
     },
     9: {
         "question": "What word is the delay between a signal being sent and received?",
-        "answer": "Latency"
+        "answer": "Latency",
     },
     10: {
         "question": "What's the type of computer network used over large areas (abbreviation)?",
-        "answer": "Wan"
+        "answer": "Wan",
     },
 }
 
@@ -137,9 +107,11 @@ def quiz_selection(score):
     Args:
         score (int): The players score earnt by getting questions right.
     """
-    print("Welcome to Quiz Selection",
-          "Press 1 to attempt Hardware Quiz",
-          "Press 2 to attempt Network Quiz")
+    print(
+        "Welcome to Quiz Selection",
+        "Press 1 to attempt Hardware Quiz",
+        "Press 2 to attempt Network Quiz",
+    )
     try:
         user_input = int(input())
         score = quiz(all_quizzes[user_input], score)
@@ -152,9 +124,11 @@ def quiz_selection(score):
     global NAME_CHOSEN
     while True:
         try:
+            name = ""
             if NAME_CHOSEN is False:  # Only runs once.
                 name = input(
-                    "Your score will be added to the leaderboard.\nEnter your name: ")
+                    "Your score will be added to the leaderboard.\nEnter your name: "
+                )
                 NAME_CHOSEN = True
             leaderboard.update({name.capitalize(): score})
             # Updates the value of a key if it already exists or adds a new one if it doesn't.
@@ -182,8 +156,8 @@ def check_answer(quiz_arg, question_arg, answer_arg, attempts_arg):
     Returns:
         bool: Boolean value depending on whether the user got the question right or wrong
     """
-    if quiz_arg[question_arg]['answer'] == answer_arg.title():
-# The above line takes the dictionary associated with a key in the quiz (dict outside nested dict),
+    if quiz_arg[question_arg]["answer"] == answer_arg.title():
+        # The above line takes the dictionary associated with a key in the quiz (dict outside nested dict),
         # and the value of 'answer' inside of that dictionary.
         print("Correct!")
         return True
@@ -219,14 +193,14 @@ def quiz(questions_dict, score):
     # Wouldn't it be neat if there was just a method that shuffled dictionaries for you?
     for key, questions in questions_dict.items():
         # The key here numbers all the questions which is useful for the check_answer() function.
-        if "True" in questions['question'] or "Yes" in questions['question']:
+        if "True" in questions["question"] or "Yes" in questions["question"]:
             attempts = 1
         # This checks if the question is a True and False one,
         # since you don't want to give multiple attempts for that.
         else:
             attempts = 3
         while attempts > 0:
-            print(questions['question'])
+            print(questions["question"])
             # This is a part of the quiz that is different from my original quiz I did.
             # Previously, I did quiz[question]['question'] and looped through the quiz normally.
             # Now I have used .items() to loop through it and make the code cleaner.
@@ -241,17 +215,20 @@ def quiz(questions_dict, score):
 
 
 def intro():
-    """Just the introduction to the revision quiz code.
-    """
-    print("""
+    """Just the introduction to the revision quiz code."""
+    print(
+        """
 Hello, Welcome to this Computer Science Revision Quiz!
 You can test yourself against two different topics, hardware and networks.
 After selecting a topic to do, you will be asked a series of questions and be given
 a few attempts to answer them. Your score will increase every question you get right
 and you'll be told your result after completing the quiz.
-""")
+"""
+    )
     sleep(5)
-    print("There isn't much else to this, so now you'll be directerd to the main menu. \n")
+    print(
+        "There isn't much else to this, so now you'll be directerd to the main menu. \n"
+    )
     sleep(1)
     main()
 
@@ -266,8 +243,10 @@ def main():
         INTRO_HAS_RAN = True
         intro()  # Only runs once
     try:
-        user_input = input("Main Menu - Press 1 to see quiz selection. Press 2 to see leaderboard. \
-Press 3 to quit. \n")
+        user_input = input(
+            "Main Menu - Press 1 to see quiz selection. Press 2 to see leaderboard. \
+Press 3 to quit. \n"
+        )
         sleep(1)
         if user_input == "1":
             quiz_selection(score)
@@ -279,7 +258,9 @@ Press 3 to quit. \n")
             print("Returning to Main Menu:")
             sleep(1)
             main()
-        elif user_input == "3": # If 3 is entered then no ValueError happens and the function ends.
+        elif (
+            user_input == "3"
+        ):  # If 3 is entered then no ValueError happens and the function ends.
             pass
         else:
             raise ValueError

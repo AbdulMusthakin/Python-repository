@@ -3,21 +3,17 @@
     "python.testing.unittestArgs": [
         "-v",
         "-s",
-        "./Tests",
+        ".",
         "-p",
-        "*test.py"
+        "*test*.py"
     ],
-    "python.testing.pytestEnabled": true,
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestArgs": [
-        "."
-    ],
-    "python.linting.pylintArgs": [
-        "--disable=C0114"
-    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "python.testing.pytestArgs": ["."],
+    "python.linting.pylintArgs": ["--disable=C0114"],
     "editor.tokenColorCustomizations": {
         "comments": "",
         "textMateRules": []
     },
-    "python.linting.enabled": false,
+    "python.linting.enabled": false
 }
