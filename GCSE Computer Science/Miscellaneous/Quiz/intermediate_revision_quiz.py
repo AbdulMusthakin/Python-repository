@@ -165,8 +165,31 @@ def quiz_selection():
     print("Which set of questions would you like to do?")
     print("1. Hardware")
     print("2. Networks")
-    
-    try:
+
+    user_input = input("> ")
+    sleep(1)
+
+    if user_input not in ["1", "2"]:
+        print("Please enter a valid number.")
+        return quiz_selection()
+
+    print("Do you want to Shuffle the questions? (Y/N)")
+
+    while True:
+        try:
+            shuffle_input = input("> ").lower()
+            sleep(1)
+            break
+        except ValueError:
+            print("Please enter a valid input.")
+            sleep(1)
+
+    if shuffle_input == "y":
+        quiz = Quiz(all_quizzes[int(user_input)], randomize_questions=True)
+    else:
+        quiz = Quiz(all_quizzes[int(user_input)])
+
+    quiz.run_quiz()
 
 
 def intro():
