@@ -1,5 +1,6 @@
 import random
 from time import sleep
+import os
 import pickle
 
 
@@ -9,6 +10,7 @@ class Quiz:
         questions,
         score=0,
         randomize_questions=False,
+        attempts=3,
     ):
         self.randomize_questions = randomize_questions
         if self.randomize_questions:
@@ -19,15 +21,31 @@ class Quiz:
             self.questions = questions
 
         self.score = score
+        self.attempts = attempts
 
     def run_quiz(self):
+        os.system("cls")
         for i, j in enumerate(self.questions):
 
+            print(
+                "------------------------------------------------------------------------------------------"
+            )
             print(f"Question {i + 1}: {j.question}")
+            print(
+                "------------------------------------------------------------------------------------------"
+            )
 
-            user_answer = input("Your answer: ").title()
-
-            self.score = j.check_answer(user_answer, self.score)
+            user_answer = ""
+            for k in range(self.attempts, 0, -1):
+                user_answer = input("Your answer: ").title()
+                print()
+                if j.check_answer(user_answer, k):
+                    self.score += 1
+                    break
+            else:
+                print("You ran out of attempts.")
+        sleep(1)
+        print("=============================================")
 
 
 class Question:
@@ -35,19 +53,46 @@ class Question:
         self.question = question
         self.answer = answer
 
-    def check_answer(self, user_answer, score):
+    def check_answer(self, user_answer, attempts):
         if user_answer == self.answer:
             print("You got it right!")
-            score += 1
+            return True
         else:
             print("That's wrong.")
             print(f"The correct answer was: {self.answer}")
+            sleep(1)
 
-        return score
+            print(f"You have {attempts - 1} attempts left")
+            return False
 
     def __str__(self) -> str:
         return f"{self.question} {self.answer}"
 
+
+class Player:
+    def __init__(self, name, personal_leaderboard={}):
+        self.name = name
+        self.personal_leaderboard = personal_leaderboard
+
+    def __str__(self) -> str:
+        return f"{self.name} {self.personal_leaderboard}"
+
+
+class Leaderboard:
+    def __init__(self, players=[]):
+        self.players = players
+
+    def get_player(self, name):
+
+        for i in self.players:
+            if i.name == name:
+                return self.players.index(i)
+
+    def __str__(self) -> str:
+        return f"{self.players}"
+
+
+leaderboard = Leaderboard()
 
 hardware_questions: list[Question] = [
     Question(
@@ -154,10 +199,81 @@ network_questions: list[Question] = [
     ),
 ]
 
+
 all_quizzes = {
-    1: hardware_questions,
-    2: network_questions,
+    1: [hardware_questions, "Hardware"],
+    2: [network_questions, "Networks"],
 }
+
+
+def view_leaderboard():
+
+    with open("GCSE Computer Science/Miscellaneous/Quiz/leaderboard.txt", "rb") as f:
+        leaderboard = pickle.load(f)
+
+    print(f"Leaderboard:")
+    for i in leaderboard.players:
+        print(f"Name: {i.name}, {i.personal_leaderboard}")
+    print()
+    hardware_max_score = 0
+    hardware_max_player = ""
+    for i in leaderboard.players:
+        try:
+            if i.personal_leaderboard["Hardware"][0] > hardware_max_score:
+                hardware_max_score = i.personal_leaderboard["Hardware"][0]
+                hardware_max_player = i.name
+        except KeyError:
+            pass
+    print("Hardware:")
+    print(f"Top player: {hardware_max_player} with a score of {hardware_max_score}")
+
+    sleep(1)
+    networks_max_score = 0
+    networks_max_player = ""
+    for i in leaderboard.players:
+        try:
+            if i.personal_leaderboard["Networks"][0] > networks_max_score:
+                networks_max_score = i.personal_leaderboard["Networks"][0]
+                networks_max_player = i.name
+        except KeyError:
+            pass
+
+    print()
+    print("Networks:")
+
+    print(f"Top player: {networks_max_player} with a score of {networks_max_score}")
+
+    print()
+    sleep(1)
+
+
+def store_score(score, quiz):
+
+    try:
+        with open(
+            "GCSE Computer Science/Miscellaneous/Quiz/leaderboard.txt", "rb"
+        ) as f:
+            leaderboard = pickle.load(f)
+    except EOFError:
+        leaderboard = Leaderboard()
+
+    played_before = input("Have you played before? (Y/N) ").lower()
+    if played_before == "y":
+        name = input("Please enter your name: ").lower()
+        player_index = leaderboard.get_player(name)
+        leaderboard.players[player_index].personal_leaderboard[quiz] = [score]
+
+    else:
+        name = input("Please enter your name: ").lower()
+
+        player = Player(name)
+        player.personal_leaderboard[quiz] = [score]
+
+        print(player.personal_leaderboard)
+        leaderboard.players.append(player)
+
+    with open("GCSE Computer Science/Miscellaneous/Quiz/leaderboard.txt", "wb") as f:
+        pickle.dump(leaderboard, f)
 
 
 def quiz_selection():
@@ -185,11 +301,20 @@ def quiz_selection():
             sleep(1)
 
     if shuffle_input == "y":
-        quiz = Quiz(all_quizzes[int(user_input)], randomize_questions=True)
+        quiz = Quiz(all_quizzes[int(user_input)][0], randomize_questions=True)
     else:
-        quiz = Quiz(all_quizzes[int(user_input)])
+        quiz = Quiz(all_quizzes[int(user_input)][0])
 
     quiz.run_quiz()
+
+    sleep(1)
+
+    print(f"You got {quiz.score} out of {len(quiz.questions)} correct.")
+
+    store_score(quiz.score, all_quizzes[int(user_input)][1])
+
+    print("Returning to main menu...")
+    sleep(1)
 
 
 def intro():
@@ -215,7 +340,6 @@ def main(intro_has_ran=True):
     """The main part of the code where the player can go the selection place,
     leaderboard, or decide to the quit the program.
     """
-    score = 0
 
     if intro_has_ran is False:
         intro()  # Only runs once
@@ -228,25 +352,20 @@ def main(intro_has_ran=True):
         sleep(1)
         if user_input == "1":
             quiz_selection()
+            main()
         elif user_input == "2":
-            print(leaderboard)
-            sleep(1)
-            print("You can add/update your name on this leaderboard.")
-            sleep(1)
-            print("Returning to Main Menu:")
-            sleep(1)
+            view_leaderboard()
             main()
         elif (
             user_input == "3"
         ):  # If 3 is entered then no ValueError happens and the function ends.
-            pass
+            exit()
         else:
             raise ValueError
     except ValueError:
         print("You have entered an invalid option. Try Again: \n")
         sleep(1)
         main()  # We don't have to make a while loop hear since the code would end now so we just
-        # call the main() function again which does the same thing as while loop but cleaner.
 
 
 if __name__ == "__main__":

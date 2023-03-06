@@ -269,3 +269,7 @@ Press 3 to quit. \n"
         sleep(1)
         main()  # We don't have to make a while loop hear since the code would end now so we just
         # call the main() function again which does the same thing as while loop but cleaner.
+
+
+if __name__ == "__main__":
+    main()
