@@ -3,7 +3,9 @@
     "python.testing.unittestArgs": ["-v", "-s", ".", "-p", "*test.py"],
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestArgs": ["."],
+    "python.testing.pytestArgs": [
+        "."
+    ],
     "python.linting.pylintArgs": ["--disable=C0114"],
     "editor.tokenColorCustomizations": {
         "comments": "",

@@ -62,4 +62,4 @@ def get_max_grade(*students):
 
 
 def test_get_max_grade():
-    assert get_max_grade(bob, jeffery, tim).strip("[]") == "Bob"
+    assert get_max_grade(bob, jeffery, tim).strip("[]").strip("''") == "Bob"
