@@ -2,18 +2,24 @@ import gspread
 
 grades_to_points = {
     "U": 0,
-    "C3": 1,
-    "C2": 2,
-    "C1": 3,
-    "B3": 4,
-    "B2": 5,
-    "B1": 6,
-    "A3": 7,
-    "A2": 8,
-    "A1": 9,
-    "A*3": 10,
-    "A*2": 11,
-    "A*1": 12,
+    "E3": 1,
+    "E2": 2,
+    "E1": 3,
+    "D3": 4,
+    "D2": 5,
+    "D1": 6,
+    "C3": 7,
+    "C2": 8,
+    "C1": 9,
+    "B3": 10,
+    "B2": 11,
+    "B1": 12,
+    "A3": 13,
+    "A2": 14,
+    "A1": 15,
+    "A*3": 16,
+    "A*2": 17,
+    "A*1": 18,
 }
 
 sa = gspread.service_account()
@@ -174,5 +180,6 @@ if __name__ == "__main__":
 
     a_m = Person("A M", 1, 11)
     i_a = Person("I A", 14, 24)
+    d_i = Person("D I", 26, 36)
 
-    store_total_subjects_max_grade(get_total_subjects_average_grade([a_m, i_a]))
+    store_total_subjects_max_grade(get_total_subjects_average_grade([a_m, i_a, d_i]))
