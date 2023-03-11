@@ -5,16 +5,19 @@ url = "https://opentdb.com/api.php?amount=10&type=boolean"
 res = requests.get(url)
 
 response1 = dict(json.loads(res.text))
-response2 = response1['results']
+response2 = response1["results"]
 
-response3 = {}
-for item in response2:
-    name = item['question']
-    response3[name] = item
+print(response2)
+for i in response2:
+    # print each element of the list in a random color
 
-keys = ['question', 'correct_answer']
-quiz = {}
-for i in response3:
-    quiz[i] = {'question' : response3[i]['question'], 'answer' : response3[i]['correct_answer']}
-print(quiz)
+    print(f"\033[32m {i['category']}")
 
+    print(f"\033[33m {i['difficulty']}")
+
+    # ansi code for pink:
+    print(f"\033[35m {i['correct_answer']}")
+
+    print(f"\033[34m {i['incorrect_answers']}")
+
+    print(f"\033[31m {i['question']}")
