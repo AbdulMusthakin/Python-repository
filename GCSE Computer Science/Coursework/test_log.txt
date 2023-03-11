@@ -1,0 +1,7 @@
+test_choose_tin_contents (__main__.TestCoursework.test_choose_tin_contents) ... ok
+test_chosen_message (__main__.TestCoursework.test_chosen_message) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 13.051s
+
+OK

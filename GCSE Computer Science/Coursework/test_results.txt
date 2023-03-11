@@ -1,0 +1,54 @@
+Test 1)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_choose_tin_contents (__main__.TestCoursework.test_choose_tin_contents) ... ok
+test_chosen_message (__main__.TestCoursework.test_chosen_message) ... ok
+test_to_fail (__main__.TestCoursework.test_to_fail) ... FAIL
+
+======================================================================
+FAIL: test_to_fail (__main__.TestCoursework.test_to_fail)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "c:\Users\Owner\Documents\Python\Python-repository\GCSE Computer Science\Coursework\coursework_test.py", line 25, in test_to_fail
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 3 tests in 13.051s
+
+FAILED (failures=1)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Test 2)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_choose_tin_contents (__main__.TestCoursework.test_choose_tin_contents) ... ok
+test_chosen_message (__main__.TestCoursework.test_chosen_message) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 13.070s
+
+OK
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Test 3)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_choose_tin_contents (__main__.TestCoursework.test_choose_tin_contents) ... ok
+test_chosen_message (__main__.TestCoursework.test_chosen_message) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 13.066s
+
+OK
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Test 4)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_choose_tin_contents (__main__.TestCoursework.test_choose_tin_contents) ... ok
+test_chosen_message (__main__.TestCoursework.test_chosen_message) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 13.051s
+
+OK
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Test 5)
