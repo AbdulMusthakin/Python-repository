@@ -9,3 +9,5 @@
 {8: <MagicMock name='input().title()' id='2227931354512'>} 
 
 {10: <MagicMock name='input().title()' id='2767240351952'>} 
+
+{12: 'Bobby'}; {'Caramel Twist': 500, 'Brazil Nut in Chocolate': 400, 'Hazelnut Triangle': 100}; 14.98; None
