@@ -1,5 +1,7 @@
 .vscode/
 
+*.gif
+
 media/
 
 Venvs
