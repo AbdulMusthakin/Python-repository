@@ -1,6 +1,7 @@
 .vscode/
 
 *.gif
+*.csv
 
 media/
 
